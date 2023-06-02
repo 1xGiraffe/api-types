@@ -1,5 +1,5 @@
 {
-  "name": "@galacticcouncil/api-types",
+  "name": "@galacticcouncil/api-augment",
   "version": "0.0.1-rc0",
   "private": false,
   "description": "HydraDX & Basilisk types augment for @polkadot/api",
@@ -19,9 +19,8 @@
     "prebuild": "rimraf build",
     "build": "tsc -b --verbose",
     "postbuild": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/postbuild.mjs",
-    "publish": "cd build && npm publish",
     "pckg:release": "npm run generate && npm run build",
-    "pckg:publish": "npm publish",
+    "pckg:publish": "cd build && npm publish",
     "pretty": "prettier --write --ignore-unknown --plugin prettier-plugin-jsdoc 'src/**/*' 'scripts/**/*'"
   },
   "exports": {
