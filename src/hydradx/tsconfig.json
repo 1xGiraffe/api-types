@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "../../build/hydradx",
+    "paths": {
+      "@galacticcouncil/api-augment/hydradx/*": ["src/hydradx/*"],
+      "@polkadot/api/augment": ["src/hydradx/interfaces/augment-api.ts"],
+      "@polkadot/types/augment": ["src/hydradx/interfaces/augment-types.ts"],
+      "@polkadot/types/lookup": ["src/hydradx/interfaces/types-lookup.ts"]
+    }
+  }
+}

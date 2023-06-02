@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "../../build/basilisk",
+    "paths": {
+      "@galacticcouncil/api-augment/basilisk/*": ["src/basilisk/*"],
+      "@polkadot/api/augment": ["src/basilisk/interfaces/augment-api.ts"],
+      "@polkadot/types/augment": ["src/basilisk/interfaces/augment-types.ts"],
+      "@polkadot/types/lookup": ["src/basilisk/interfaces/types-lookup.ts"]
+    }
+  }
+}
