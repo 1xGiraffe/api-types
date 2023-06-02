@@ -1,6 +1,6 @@
 {
   "name": "@galacticcouncil/api-augment",
-  "version": "0.0.1-rc0",
+  "version": "0.0.1",
   "private": false,
   "description": "HydraDX & Basilisk types augment for @polkadot/api",
   "author": "Pavol Noha <pavol.noha@gmail.com>",
@@ -8,8 +8,8 @@
     "generate": "npm run load:meta && npm run generate:defs && npm run generate:meta",
     "postgenerate": "npm run pretty",
     "load:meta": "npm run load:meta:basilisk && npm run load:meta:hydradx",
-    "load:meta:basilisk": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/metadata.mjs --ws wss://rpc.basilisk.cloud --chain basilisk",
-    "load:meta:hydradx": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/metadata.mjs --ws wss://rpc.hydradx.cloud --chain hydradx",
+    "load:meta:basilisk": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/metadata.mjs --ws wss://rococo-basilisk-rpc.hydration.dev --chain basilisk",
+    "load:meta:hydradx": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/metadata.mjs --ws wss://rococo-hydradx-rpc.hydration.dev --chain hydradx",
     "generate:defs": "npm run generate:defs:basilisk && npm run generate:defs:hydradx",
     "generate:defs:basilisk": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package @galacticcouncil/api-augment/basilisk/interfaces --input ./src/basilisk/interfaces --endpoint ./src/basilisk/metadata.json",
     "generate:defs:hydradx": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package @galacticcouncil/api-augment/hydradx/interfaces --input ./src/hydradx/interfaces --endpoint  ./src/hydradx/metadata.json",
