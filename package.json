@@ -1,6 +1,6 @@
 {
   "name": "@galacticcouncil/api-augment",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "HydraDX & Basilisk types augment for @polkadot/api",
   "author": "Pavol Noha <pavol.noha@gmail.com>",

@@ -798,7 +798,15 @@ declare module "@polkadot/api-base/types/submittable" {
         (
           schedule:
             | PalletDcaSchedule
-            | { owner?: any; period?: any; totalAmount?: any; order?: any }
+            | {
+                owner?: any;
+                period?: any;
+                totalAmount?: any;
+                maxRetries?: any;
+                stabilityThreshold?: any;
+                slippage?: any;
+                order?: any;
+              }
             | string
             | Uint8Array,
           startExecutionBlock: Option<u32> | null | Uint8Array | u32 | AnyNumber
