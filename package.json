@@ -1,7 +1,8 @@
 {
   "name": "@galacticcouncil/api-augment",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
+  "type": "module",
   "description": "HydraDX & Basilisk types augment for @polkadot/api",
   "author": "Pavol Noha <pavol.noha@gmail.com>",
   "scripts": {
@@ -11,11 +12,11 @@
     "load:meta:basilisk": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/metadata.mjs --ws wss://rococo-basilisk-rpc.hydration.dev --chain basilisk",
     "load:meta:hydradx": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/metadata.mjs --ws wss://rococo-hydradx-rpc.hydration.dev --chain hydradx",
     "generate:defs": "npm run generate:defs:basilisk && npm run generate:defs:hydradx",
-    "generate:defs:basilisk": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package @galacticcouncil/api-augment/basilisk/interfaces --input ./src/basilisk/interfaces --endpoint ./src/basilisk/metadata.json",
-    "generate:defs:hydradx": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package @galacticcouncil/api-augment/hydradx/interfaces --input ./src/hydradx/interfaces --endpoint  ./src/hydradx/metadata.json",
+    "generate:defs:basilisk": "node --experimental-specifier-resolution=node --loader ts-node/esm  node_modules/.bin/polkadot-types-from-defs --package @galacticcouncil/api-augment/basilisk/interfaces --input ./src/basilisk/interfaces --endpoint ./src/basilisk/metadata.json",
+    "generate:defs:hydradx": "node --experimental-specifier-resolution=node --loader ts-node/esm  node_modules/.bin/polkadot-types-from-defs --package @galacticcouncil/api-augment/hydradx/interfaces --input ./src/hydradx/interfaces --endpoint  ./src/hydradx/metadata.json",
     "generate:meta": "npm run generate:meta:basilisk && npm run generate:meta:hydradx",
-    "generate:meta:basilisk": "ts-node --skip-project node_modules/.bin/polkadot-types-from-chain --endpoint ./src/basilisk/metadata.json --package @galacticcouncil/api-augment/basilisk/interfaces --output ./src/basilisk/interfaces",
-    "generate:meta:hydradx": "ts-node --skip-project node_modules/.bin/polkadot-types-from-chain --endpoint ./src/hydradx/metadata.json --package @galacticcouncil/api-augment/hydradx/interfaces --output ./src/hydradx/interfaces",
+    "generate:meta:basilisk": "node --experimental-specifier-resolution=node --loader ts-node/esm node_modules/.bin/polkadot-types-from-chain --endpoint ./src/basilisk/metadata.json --package @galacticcouncil/api-augment/basilisk/interfaces --output ./src/basilisk/interfaces",
+    "generate:meta:hydradx": "node --experimental-specifier-resolution=node --loader ts-node/esm node_modules/.bin/polkadot-types-from-chain --endpoint ./src/hydradx/metadata.json --package @galacticcouncil/api-augment/hydradx/interfaces --output ./src/hydradx/interfaces",
     "prebuild": "rimraf build",
     "build": "tsc -b --verbose",
     "postbuild": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/postbuild.mjs",
@@ -53,26 +54,27 @@
     "api"
   ],
   "devDependencies": {
-    "@polkadot/api": "^9.14.2",
-    "@polkadot/typegen": "^9.14.2",
+    "@polkadot/api": "^10.9.1",
+    "@polkadot/typegen": "^10.9.1",
     "prettier": "^2.7.1",
     "prettier-plugin-jsdoc": "^0.3.38",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "websocket": "^1.0.34"
   },
   "overrides": {
-    "@polkadot/api": "^9.14.2",
-    "@polkadot/api-augment": "9.14.2",
-    "@polkadot/api-derive": "9.14.2",
-    "@polkadot/api-base": "9.14.2",
-    "@polkadot/rpc-augment": "9.14.2",
-    "@polkadot/rpc-core": "9.14.2",
-    "@polkadot/rpc-provider": "9.14.2",
-    "@polkadot/types": "9.14.2",
-    "@polkadot/types-augment": "9.14.2",
-    "@polkadot/types-codec": "9.14.2",
-    "@polkadot/types-create": "9.14.2",
-    "@polkadot/types-known": "9.14.2"
+    "@polkadot/api": "^10.9.1",
+    "@polkadot/api-augment": "10.9.1",
+    "@polkadot/api-derive": "10.9.1",
+    "@polkadot/api-base": "10.9.1",
+    "@polkadot/rpc-augment": "10.9.1",
+    "@polkadot/rpc-core": "10.9.1",
+    "@polkadot/rpc-provider": "10.9.1",
+    "@polkadot/types": "10.9.1",
+    "@polkadot/types-augment": "10.9.1",
+    "@polkadot/types-codec": "10.9.1",
+    "@polkadot/types-create": "10.9.1",
+    "@polkadot/types-known": "10.9.1"
   }
 }
