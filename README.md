@@ -1,3 +1,4 @@
+[![npm version](https://img.shields.io/npm/v/@galacticcouncil/api-augment.svg)](https://www.npmjs.com/package/@galacticcouncil/api-augment)
 
 <a href="http://www.typescriptlang.org" target="_blank">TypeScript</a> type definitions for **HydraDX** & **Basilisk** chains to decorate the <a href="https://www.npmjs.com/package/@polkadot/api" target="_blank">@polkadot/api</a>.
 
