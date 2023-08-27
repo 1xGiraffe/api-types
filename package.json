@@ -2,9 +2,9 @@
   "name": "@galacticcouncil/api-augment",
   "version": "0.0.4",
   "private": false,
-  "type": "module",
   "description": "HydraDX & Basilisk types augment for @polkadot/api",
-  "author": "Pavol Noha <pavol.noha@gmail.com>",
+  "author": "GalacticCouncil",
+  "type": "module",
   "scripts": {
     "generate": "npm run load:meta && npm run generate:defs && npm run generate:meta",
     "postgenerate": "npm run pretty",
