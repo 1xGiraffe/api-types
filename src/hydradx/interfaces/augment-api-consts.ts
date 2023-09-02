@@ -8,7 +8,7 @@ import '@polkadot/api-base/types/consts';
 import type { ApiTypes, AugmentedConst } from '@polkadot/api-base/types';
 import type { Option, U8aFixed, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { Codec, ITuple } from '@polkadot/types-codec/types';
-import type { AccountId32, Percent, Permill } from '@polkadot/types/interfaces/runtime';
+import type { AccountId32, Perbill, Percent, Permill } from '@polkadot/types/interfaces/runtime';
 import type { FrameSupportPalletId, FrameSystemLimitsBlockLength, FrameSystemLimitsBlockWeights, HydradxTraitsOracleOraclePeriod, PalletDynamicFeesFeeParams, SpVersionRuntimeVersion, SpWeightsRuntimeDbWeight, SpWeightsWeightV2Weight, XcmV3MultiLocation } from '@polkadot/types/lookup';
 
 export type __AugmentedConst<ApiType extends ApiTypes> = AugmentedConst<ApiType>;
@@ -40,6 +40,24 @@ declare module '@polkadot/api-base/types/consts' {
        * The maximum number of named reserves that can exist on an account.
        **/
       maxReserves: u32 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    bonds: {
+      /**
+       * Protocol fee receiver.
+       **/
+      feeReceiver: AccountId32 & AugmentedConst<ApiType>;
+      /**
+       * The pallet id, used for deriving its sovereign account ID.
+       **/
+      palletId: FrameSupportPalletId & AugmentedConst<ApiType>;
+      /**
+       * Protocol fee.
+       **/
+      protocolFee: Permill & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -313,6 +331,29 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       [key: string]: Codec;
     };
+    lbp: {
+      /**
+       * Max fraction of pool to sell in single transaction
+       **/
+      maxInRatio: u128 & AugmentedConst<ApiType>;
+      /**
+       * Max fraction of pool to buy in single transaction
+       **/
+      maxOutRatio: u128 & AugmentedConst<ApiType>;
+      /**
+       * Minimum pool liquidity, sole purpose of this is to keep the math working
+       **/
+      minPoolLiquidity: u128 & AugmentedConst<ApiType>;
+      /**
+       * Minimum trading limit, sole purpose of this is to keep the math working
+       **/
+      minTradingLimit: u128 & AugmentedConst<ApiType>;
+      repayFee: ITuple<[u32, u32]> & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
     multisig: {
       /**
        * The base amount of currency needed to reserve for creating a multisig execution or to
@@ -505,6 +546,62 @@ declare module '@polkadot/api-base/types/consts' {
        * The maximum number of scheduled calls in the queue for a single block.
        **/
       maxScheduledPerBlock: u32 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    staking: {
+      /**
+       * Weight of the action points in total points calculations.
+       **/
+      actionPointsWeight: Perbill & AugmentedConst<ApiType>;
+      /**
+       * Weight of the actual stake in slash points calculation. Bigger the value lower the calculated slash points.
+       **/
+      currentStakeWeight: u8 & AugmentedConst<ApiType>;
+      /**
+       * Max amount of votes the user can have at any time.
+       **/
+      maxVotes: u32 & AugmentedConst<ApiType>;
+      /**
+       * Min amount user must stake.
+       **/
+      minStake: u128 & AugmentedConst<ApiType>;
+      /**
+       * Native Asset ID.
+       **/
+      nativeAssetId: u32 & AugmentedConst<ApiType>;
+      /**
+       * NFT collection id.
+       **/
+      nftCollectionId: u128 & AugmentedConst<ApiType>;
+      /**
+       * Pallet id.
+       **/
+      palletId: FrameSupportPalletId & AugmentedConst<ApiType>;
+      /**
+       * Staking period length in blocks.
+       **/
+      periodLength: u32 & AugmentedConst<ApiType>;
+      /**
+       * Unit we are distributing action points for.
+       * e.g if RewardedVoteUnit is 1HDX user will receive `x` action points per each voted 1 HDX.
+       **/
+      rewardedVoteUnit: u128 & AugmentedConst<ApiType>;
+      /**
+       * Number of time points users receive for each period.
+       **/
+      timePointsPerPeriod: u8 & AugmentedConst<ApiType>;
+      /**
+       * Weight of the time points in total points calculations.
+       **/
+      timePointsWeight: Permill & AugmentedConst<ApiType>;
+      /**
+       * Number of periods user can't claim rewards for. User can exit but won't receive any rewards.
+       * If he stay longer than `UnclaimablePeriods` he will receive rewards also for these periods.
+       **/
+      unclaimablePeriods: u128 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/

@@ -91,6 +91,28 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
+    bonds: {
+      /**
+       * Asset type not allowed for underlying asset
+       **/
+      DisallowedAsset: AugmentedError<ApiType>;
+      /**
+       * Maturity not long enough
+       **/
+      InvalidMaturity: AugmentedError<ApiType>;
+      /**
+       * Bond is not mature
+       **/
+      NotMature: AugmentedError<ApiType>;
+      /**
+       * Bond not registered
+       **/
+      NotRegistered: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
     circuitBreaker: {
       /**
        * Invalid value for a limit. Limit must be non-zero.
@@ -640,6 +662,104 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
+    lbp: {
+      /**
+       * Liquidity being added should not be zero
+       **/
+      CannotAddZeroLiquidity: AugmentedError<ApiType>;
+      /**
+       * Pool assets can not be the same
+       **/
+      CannotCreatePoolWithSameAssets: AugmentedError<ApiType>;
+      /**
+       * Invalid fee amount
+       **/
+      FeeAmountInvalid: AugmentedError<ApiType>;
+      /**
+       * Not more than one fee collector per asset id
+       **/
+      FeeCollectorWithAssetAlreadyUsed: AugmentedError<ApiType>;
+      /**
+       * Asset balance too low
+       **/
+      InsufficientAssetBalance: AugmentedError<ApiType>;
+      /**
+       * Liquidity has not reached the required minimum.
+       **/
+      InsufficientLiquidity: AugmentedError<ApiType>;
+      /**
+       * Amount is less than minimum trading limit.
+       **/
+      InsufficientTradingAmount: AugmentedError<ApiType>;
+      /**
+       * Invalid block range
+       **/
+      InvalidBlockRange: AugmentedError<ApiType>;
+      /**
+       * Weight set is out of range
+       **/
+      InvalidWeight: AugmentedError<ApiType>;
+      /**
+       * Trade amount is too high
+       **/
+      MaxInRatioExceeded: AugmentedError<ApiType>;
+      /**
+       * Trade amount is too high
+       **/
+      MaxOutRatioExceeded: AugmentedError<ApiType>;
+      /**
+       * Sale duration is too long
+       **/
+      MaxSaleDurationExceeded: AugmentedError<ApiType>;
+      /**
+       * Nothing to update
+       **/
+      NothingToUpdate: AugmentedError<ApiType>;
+      /**
+       * Account is not a pool owner
+       **/
+      NotOwner: AugmentedError<ApiType>;
+      /**
+       * An unexpected integer overflow occurred
+       **/
+      Overflow: AugmentedError<ApiType>;
+      /**
+       * Pool has been already created
+       **/
+      PoolAlreadyExists: AugmentedError<ApiType>;
+      /**
+       * Pool does not exist
+       **/
+      PoolNotFound: AugmentedError<ApiType>;
+      /**
+       * Sale is not running
+       **/
+      SaleIsNotRunning: AugmentedError<ApiType>;
+      /**
+       * Sale is still in progress
+       **/
+      SaleNotEnded: AugmentedError<ApiType>;
+      /**
+       * Sale already started
+       **/
+      SaleStarted: AugmentedError<ApiType>;
+      /**
+       * Trading limit reached
+       **/
+      TradingLimitReached: AugmentedError<ApiType>;
+      /**
+       * Calculation error
+       **/
+      WeightCalculationError: AugmentedError<ApiType>;
+      /**
+       * Can not perform a trade with zero amount
+       **/
+      ZeroAmount: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
     multisig: {
       /**
        * Call is already approved by this signatory.
@@ -761,6 +881,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Minimum limit has not been reached during trade.
        **/
       BuyLimitNotReached: AugmentedError<ApiType>;
+      /**
+       * More than allowed amount of fee has been transferred.
+       **/
+      FeeOverdraft: AugmentedError<ApiType>;
       /**
        * Signed account is not owner of position instance.
        **/
@@ -1362,6 +1486,57 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
+    staking: {
+      /**
+       * Staking is already initialized.
+       **/
+      AlreadyInitialized: AugmentedError<ApiType>;
+      /**
+       * Arithmetic error.
+       **/
+      Arithmetic: AugmentedError<ApiType>;
+      /**
+       * Signer is not an owner of the staking position.
+       **/
+      Forbidden: AugmentedError<ApiType>;
+      /**
+       * Action cannot be completed because unexpected error has occurred. This should be reported
+       * to protocol maintainers.
+       **/
+      InconsistentState: AugmentedError<ApiType>;
+      /**
+       * Balance is too low.
+       **/
+      InsufficientBalance: AugmentedError<ApiType>;
+      /**
+       * Staked amount is too low.
+       **/
+      InsufficientStake: AugmentedError<ApiType>;
+      /**
+       * Maximum amount of votes were reached for staking position.
+       **/
+      MaxVotesReached: AugmentedError<ApiType>;
+      /**
+       * Pot's balance is zero.
+       **/
+      MissingPotBalance: AugmentedError<ApiType>;
+      /**
+       * Staking is not initialized.
+       **/
+      NotInitialized: AugmentedError<ApiType>;
+      /**
+       * Account's position already exists.
+       **/
+      PositionAlreadyExists: AugmentedError<ApiType>;
+      /**
+       * Staking position has not been found.
+       **/
+      PositionNotFound: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
     system: {
       /**
        * The origin filter prevent the call to be dispatched.
@@ -1516,6 +1691,10 @@ declare module '@polkadot/api-base/types/errors' {
        * invalid character encoding
        **/
       InvalidCharacter: AugmentedError<ApiType>;
+      /**
+       * pallet name or function name is too long
+       **/
+      NameTooLong: AugmentedError<ApiType>;
       /**
        * Generic error
        **/

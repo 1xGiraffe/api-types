@@ -10,7 +10,7 @@ import type { Data } from '@polkadot/types';
 import type { BTreeMap, Bytes, Null, Option, U8aFixed, Vec, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { AnyNumber, ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, Call, H256 } from '@polkadot/types/interfaces/runtime';
-import type { CumulusPalletDmpQueueConfigData, CumulusPalletDmpQueuePageIndexData, CumulusPalletParachainSystemRelayStateSnapshotMessagingStateSnapshot, CumulusPalletXcmpQueueInboundChannelDetails, CumulusPalletXcmpQueueOutboundChannelDetails, CumulusPalletXcmpQueueQueueConfigData, FrameSupportDispatchPerDispatchClassWeight, FrameSupportPreimagesBounded, FrameSystemAccountInfo, FrameSystemEventRecord, FrameSystemLastRuntimeUpgradeInfo, FrameSystemPhase, HydradxRuntimeOpaqueSessionKeys, HydradxRuntimeXcmAssetLocation, HydradxTraitsOracleOraclePeriod, OrmlTokensAccountData, OrmlTokensBalanceLock, OrmlTokensReserveData, OrmlVestingVestingSchedule, PalletAssetRegistryAssetDetails, PalletAssetRegistryAssetMetadata, PalletBalancesAccountData, PalletBalancesBalanceLock, PalletBalancesReserveData, PalletCircuitBreakerLiquidityLimit, PalletCircuitBreakerTradeVolumeLimit, PalletClaimsEthereumAddress, PalletCollatorSelectionCandidateInfo, PalletCollectiveVotes, PalletDcaSchedule, PalletDemocracyReferendumInfo, PalletDemocracyVoteThreshold, PalletDemocracyVoteVoting, PalletDynamicFeesFeeEntry, PalletElectionsPhragmenSeatHolder, PalletElectionsPhragmenVoter, PalletEmaOracleOracleEntry, PalletGenesisHistoryChain, PalletIdentityRegistrarInfo, PalletIdentityRegistration, PalletLiquidityMiningDepositData, PalletLiquidityMiningGlobalFarmData, PalletLiquidityMiningYieldFarmData, PalletMultisigMultisig, PalletOmnipoolAssetState, PalletOmnipoolPosition, PalletOmnipoolSimpleImbalance, PalletOmnipoolTradability, PalletOtcOrder, PalletPreimageRequestStatus, PalletProxyAnnouncement, PalletProxyProxyDefinition, PalletSchedulerScheduled, PalletTipsOpenTip, PalletTransactionPaymentReleases, PalletTreasuryProposal, PalletUniquesCollectionDetails, PalletUniquesCollectionMetadata, PalletUniquesItemDetails, PalletUniquesItemMetadata, PalletXcmQueryStatus, PalletXcmRemoteLockedFungibleRecord, PalletXcmVersionMigrationStage, PolkadotCorePrimitivesOutboundHrmpMessage, PolkadotPrimitivesV2AbridgedHostConfiguration, PolkadotPrimitivesV2PersistedValidationData, PolkadotPrimitivesV2UpgradeRestriction, SpConsensusAuraSr25519AppSr25519Public, SpCoreCryptoKeyTypeId, SpRuntimeDigest, SpTrieStorageProof, SpWeightsWeightV2Weight, XcmV3MultiLocation, XcmVersionedAssetId, XcmVersionedMultiLocation } from '@polkadot/types/lookup';
+import type { CumulusPalletDmpQueueConfigData, CumulusPalletDmpQueuePageIndexData, CumulusPalletParachainSystemRelayStateSnapshotMessagingStateSnapshot, CumulusPalletXcmpQueueDeferredMessage, CumulusPalletXcmpQueueInboundChannelDetails, CumulusPalletXcmpQueueOutboundChannelDetails, CumulusPalletXcmpQueueQueueConfigData, FrameSupportDispatchPerDispatchClassWeight, FrameSupportPreimagesBounded, FrameSystemAccountInfo, FrameSystemEventRecord, FrameSystemLastRuntimeUpgradeInfo, FrameSystemPhase, HydradxRuntimeOpaqueSessionKeys, HydradxRuntimeXcmAssetLocation, HydradxTraitsOracleOraclePeriod, OrmlTokensAccountData, OrmlTokensBalanceLock, OrmlTokensReserveData, OrmlVestingVestingSchedule, PalletAssetRegistryAssetDetails, PalletAssetRegistryAssetMetadata, PalletBalancesAccountData, PalletBalancesBalanceLock, PalletBalancesReserveData, PalletCircuitBreakerLiquidityLimit, PalletCircuitBreakerTradeVolumeLimit, PalletClaimsEthereumAddress, PalletCollatorSelectionCandidateInfo, PalletCollectiveVotes, PalletDcaSchedule, PalletDemocracyReferendumInfo, PalletDemocracyVoteThreshold, PalletDemocracyVoteVoting, PalletDynamicFeesFeeEntry, PalletElectionsPhragmenSeatHolder, PalletElectionsPhragmenVoter, PalletEmaOracleOracleEntry, PalletGenesisHistoryChain, PalletIdentityRegistrarInfo, PalletIdentityRegistration, PalletLbpPool, PalletLiquidityMiningDepositData, PalletLiquidityMiningGlobalFarmData, PalletLiquidityMiningYieldFarmData, PalletMultisigMultisig, PalletOmnipoolAssetState, PalletOmnipoolPosition, PalletOmnipoolSimpleImbalance, PalletOmnipoolTradability, PalletOtcOrder, PalletPreimageRequestStatus, PalletProxyAnnouncement, PalletProxyProxyDefinition, PalletSchedulerScheduled, PalletStakingPosition, PalletStakingStakingData, PalletStakingVoting, PalletTipsOpenTip, PalletTransactionPaymentReleases, PalletTreasuryProposal, PalletUniquesCollectionDetails, PalletUniquesCollectionMetadata, PalletUniquesItemDetails, PalletUniquesItemMetadata, PalletXcmQueryStatus, PalletXcmRemoteLockedFungibleRecord, PalletXcmVersionMigrationStage, PolkadotCorePrimitivesOutboundHrmpMessage, PolkadotPrimitivesV2AbridgedHostConfiguration, PolkadotPrimitivesV2PersistedValidationData, PolkadotPrimitivesV2UpgradeRestriction, SpConsensusAuraSr25519AppSr25519Public, SpCoreCryptoKeyTypeId, SpRuntimeDigest, SpTrieStorageProof, SpWeightsWeightV2Weight, XcmV3MultiLocation, XcmVersionedAssetId, XcmVersionedMultiLocation } from '@polkadot/types/lookup';
 import type { Observable } from '@polkadot/types/types';
 
 export type __AugmentedQuery<ApiType extends ApiTypes> = AugmentedQuery<ApiType, () => unknown>;
@@ -133,6 +133,22 @@ declare module '@polkadot/api-base/types/storage' {
        * The total units issued in the system.
        **/
       totalIssuance: AugmentedQuery<ApiType, () => Observable<u128>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
+    };
+    bonds: {
+      /**
+       * Registered bond ids.
+       * Maps (underlying asset ID, maturity) -> bond ID
+       **/
+      bondIds: AugmentedQuery<ApiType, (arg: ITuple<[u32, u64]> | [u32 | AnyNumber | Uint8Array, u64 | AnyNumber | Uint8Array]) => Observable<Option<u32>>, [ITuple<[u32, u64]>]> & QueryableStorageEntry<ApiType, [ITuple<[u32, u64]>]>;
+      /**
+       * Registered bonds.
+       * Maps bond ID -> (underlying asset ID, maturity)
+       **/
+      bonds: AugmentedQuery<ApiType, (arg: u32 | AnyNumber | Uint8Array) => Observable<Option<ITuple<[u32, u64]>>>, [u32]> & QueryableStorageEntry<ApiType, [u32]>;
       /**
        * Generic query
        **/
@@ -487,6 +503,21 @@ declare module '@polkadot/api-base/types/storage' {
        * context. If the account is not some other account's sub-identity, then just `None`.
        **/
       superOf: AugmentedQuery<ApiType, (arg: AccountId32 | string | Uint8Array) => Observable<Option<ITuple<[AccountId32, Data]>>>, [AccountId32]> & QueryableStorageEntry<ApiType, [AccountId32]>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
+    };
+    lbp: {
+      /**
+       * Storage used for tracking existing fee collectors
+       * Not more than one fee collector per asset possible
+       **/
+      feeCollectorWithAsset: AugmentedQuery<ApiType, (arg1: AccountId32 | string | Uint8Array, arg2: u32 | AnyNumber | Uint8Array) => Observable<bool>, [AccountId32, u32]> & QueryableStorageEntry<ApiType, [AccountId32, u32]>;
+      /**
+       * Details of a pool.
+       **/
+      poolData: AugmentedQuery<ApiType, (arg: AccountId32 | string | Uint8Array) => Observable<Option<PalletLbpPool>>, [AccountId32]> & QueryableStorageEntry<ApiType, [AccountId32]>;
       /**
        * Generic query
        **/
@@ -885,6 +916,28 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       [key: string]: QueryableStorageEntry<ApiType>;
     };
+    staking: {
+      /**
+       * Position ids sequencer.
+       **/
+      nextPositionId: AugmentedQuery<ApiType, () => Observable<u128>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * User's position state.
+       **/
+      positions: AugmentedQuery<ApiType, (arg: u128 | AnyNumber | Uint8Array) => Observable<Option<PalletStakingPosition>>, [u128]> & QueryableStorageEntry<ApiType, [u128]>;
+      /**
+       * List of position votes.
+       **/
+      positionVotes: AugmentedQuery<ApiType, (arg: u128 | AnyNumber | Uint8Array) => Observable<PalletStakingVoting>, [u128]> & QueryableStorageEntry<ApiType, [u128]>;
+      /**
+       * Global staking state.
+       **/
+      staking: AugmentedQuery<ApiType, () => Observable<PalletStakingStakingData>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
+    };
     system: {
       /**
        * The full account information for a particular account ID.
@@ -1187,6 +1240,10 @@ declare module '@polkadot/api-base/types/storage' {
        * Counter for the related counted storage map
        **/
       counterForOverweight: AugmentedQuery<ApiType, () => Observable<u32>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Inbound aggregate XCMP messages. It can only be one per ParaId.
+       **/
+      deferredXcmMessages: AugmentedQuery<ApiType, (arg: u32 | AnyNumber | Uint8Array) => Observable<Vec<CumulusPalletXcmpQueueDeferredMessage>>, [u32]> & QueryableStorageEntry<ApiType, [u32]>;
       /**
        * Inbound aggregate XCMP messages. It can only be one per ParaId/block.
        **/

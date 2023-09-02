@@ -9,7 +9,7 @@ import type { ApiTypes, AugmentedEvent } from '@polkadot/api-base/types';
 import type { Bytes, Null, Option, Result, U8aFixed, Vec, bool, i128, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, H256, Permill, Perquintill } from '@polkadot/types/interfaces/runtime';
-import type { FrameSupportDispatchDispatchInfo, FrameSupportTokensMiscBalanceStatus, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletClaimsEthereumAddress, PalletDemocracyVoteAccountVote, PalletDemocracyVoteThreshold, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, SpRuntimeDispatchError, SpWeightsWeightV2Weight, XcmV3MultiAsset, XcmV3MultiLocation, XcmV3MultiassetMultiAssets, XcmV3Response, XcmV3TraitsError, XcmV3TraitsOutcome, XcmV3Xcm, XcmVersionedMultiAssets, XcmVersionedMultiLocation } from '@polkadot/types/lookup';
+import type { FrameSupportDispatchDispatchInfo, FrameSupportTokensMiscBalanceStatus, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletClaimsEthereumAddress, PalletDemocracyVoteAccountVote, PalletDemocracyVoteThreshold, PalletLbpPool, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, SpRuntimeDispatchError, SpWeightsWeightV2Weight, XcmV3MultiAsset, XcmV3MultiLocation, XcmV3MultiassetMultiAssets, XcmV3Response, XcmV3TraitsError, XcmV3TraitsOutcome, XcmV3Xcm, XcmVersionedMultiAssets, XcmVersionedMultiLocation } from '@polkadot/types/lookup';
 
 export type __AugmentedEvent<ApiType extends ApiTypes> = AugmentedEvent<ApiType>;
 
@@ -80,6 +80,24 @@ declare module '@polkadot/api-base/types/events' {
        * Some amount was withdrawn from the account (e.g. for transaction fees).
        **/
       Withdraw: AugmentedEvent<ApiType, [who: AccountId32, amount: u128], { who: AccountId32, amount: u128 }>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
+    };
+    bonds: {
+      /**
+       * New bond were issued
+       **/
+      Issued: AugmentedEvent<ApiType, [issuer: AccountId32, bondId: u32, amount: u128, fee: u128], { issuer: AccountId32, bondId: u32, amount: u128, fee: u128 }>;
+      /**
+       * Bonds were redeemed
+       **/
+      Redeemed: AugmentedEvent<ApiType, [who: AccountId32, bondId: u32, amount: u128], { who: AccountId32, bondId: u32, amount: u128 }>;
+      /**
+       * A bond asset was registered
+       **/
+      TokenCreated: AugmentedEvent<ApiType, [issuer: AccountId32, assetId: u32, bondId: u32, maturity: u64], { issuer: AccountId32, assetId: u32, bondId: u32, maturity: u64 }>;
       /**
        * Generic event
        **/
@@ -459,6 +477,36 @@ declare module '@polkadot/api-base/types/events' {
        * main identity account to the sub-identity account.
        **/
       SubIdentityRevoked: AugmentedEvent<ApiType, [sub: AccountId32, main: AccountId32, deposit: u128], { sub: AccountId32, main: AccountId32, deposit: u128 }>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
+    };
+    lbp: {
+      /**
+       * Purchase executed.
+       **/
+      BuyExecuted: AugmentedEvent<ApiType, [who: AccountId32, assetOut: u32, assetIn: u32, amount: u128, buyPrice: u128, feeAsset: u32, feeAmount: u128], { who: AccountId32, assetOut: u32, assetIn: u32, amount: u128, buyPrice: u128, feeAsset: u32, feeAmount: u128 }>;
+      /**
+       * New liquidity was provided to the pool.
+       **/
+      LiquidityAdded: AugmentedEvent<ApiType, [who: AccountId32, assetA: u32, assetB: u32, amountA: u128, amountB: u128], { who: AccountId32, assetA: u32, assetB: u32, amountA: u128, amountB: u128 }>;
+      /**
+       * Liquidity was removed from the pool and the pool was destroyed.
+       **/
+      LiquidityRemoved: AugmentedEvent<ApiType, [who: AccountId32, assetA: u32, assetB: u32, amountA: u128, amountB: u128], { who: AccountId32, assetA: u32, assetB: u32, amountA: u128, amountB: u128 }>;
+      /**
+       * Pool was created by the `CreatePool` origin.
+       **/
+      PoolCreated: AugmentedEvent<ApiType, [pool: AccountId32, data: PalletLbpPool], { pool: AccountId32, data: PalletLbpPool }>;
+      /**
+       * Pool data were updated.
+       **/
+      PoolUpdated: AugmentedEvent<ApiType, [pool: AccountId32, data: PalletLbpPool], { pool: AccountId32, data: PalletLbpPool }>;
+      /**
+       * Sale executed.
+       **/
+      SellExecuted: AugmentedEvent<ApiType, [who: AccountId32, assetIn: u32, assetOut: u32, amount: u128, salePrice: u128, feeAsset: u32, feeAmount: u128], { who: AccountId32, assetIn: u32, assetOut: u32, amount: u128, salePrice: u128, feeAsset: u32, feeAmount: u128 }>;
       /**
        * Generic event
        **/
@@ -986,6 +1034,36 @@ declare module '@polkadot/api-base/types/events' {
        **/
       [key: string]: AugmentedEvent<ApiType>;
     };
+    staking: {
+      /**
+       * Staking's `accumulated_reward_per_stake` was updated.
+       **/
+      AccumulatedRpsUpdated: AugmentedEvent<ApiType, [accumulatedRps: u128, totalStake: u128], { accumulatedRps: u128, totalStake: u128 }>;
+      /**
+       * New staking position was created and NFT was minted.
+       **/
+      PositionCreated: AugmentedEvent<ApiType, [who: AccountId32, positionId: u128, stake: u128], { who: AccountId32, positionId: u128, stake: u128 }>;
+      /**
+       * Rewards were claimed.
+       **/
+      RewardsClaimed: AugmentedEvent<ApiType, [who: AccountId32, positionId: u128, paidRewards: u128, unlockedRewards: u128, slashedPoints: u128, slashedUnpaidRewards: u128], { who: AccountId32, positionId: u128, paidRewards: u128, unlockedRewards: u128, slashedPoints: u128, slashedUnpaidRewards: u128 }>;
+      /**
+       * Staked amount for existing position was increased.
+       **/
+      StakeAdded: AugmentedEvent<ApiType, [who: AccountId32, positionId: u128, stake: u128, totalStake: u128, lockedRewards: u128, slashedPoints: u128], { who: AccountId32, positionId: u128, stake: u128, totalStake: u128, lockedRewards: u128, slashedPoints: u128 }>;
+      /**
+       * Staking was initialized.
+       **/
+      StakingInitialized: AugmentedEvent<ApiType, [nonDustableBalance: u128], { nonDustableBalance: u128 }>;
+      /**
+       * Staked amount was withdrawn and NFT was burned.
+       **/
+      Unstaked: AugmentedEvent<ApiType, [who: AccountId32, positionId: u128, unlockedStake: u128, rewards: u128, unlockedRewards: u128], { who: AccountId32, positionId: u128, unlockedStake: u128, rewards: u128, unlockedRewards: u128 }>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
+    };
     system: {
       /**
        * `:code` was updated.
@@ -1417,6 +1495,11 @@ declare module '@polkadot/api-base/types/events' {
        * Some XCM was executed ok.
        **/
       Success: AugmentedEvent<ApiType, [messageHash: Option<U8aFixed>, weight: SpWeightsWeightV2Weight], { messageHash: Option<U8aFixed>, weight: SpWeightsWeightV2Weight }>;
+      /**
+       * Some XCM was deferred for later execution
+       **/
+      XcmDeferred: AugmentedEvent<ApiType, [sender: u32, sentAt: u32, deferredTo: u32, messageHash: Option<U8aFixed>], { sender: u32, sentAt: u32, deferredTo: u32, messageHash: Option<U8aFixed> }>;
+      XcmDeferredQueueFull: AugmentedEvent<ApiType, []>;
       /**
        * An HRMP message was sent to a sibling parachain.
        **/

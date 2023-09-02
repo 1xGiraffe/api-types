@@ -10,7 +10,7 @@ import type { Data } from '@polkadot/types';
 import type { Bytes, Compact, Option, U8aFixed, Vec, bool, i128, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { AnyNumber, IMethod, ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, Call, H256, Permill, Perquintill } from '@polkadot/types/interfaces/runtime';
-import type { CumulusPrimitivesParachainInherentParachainInherentData, FrameSupportPreimagesBounded, HydradxRuntimeOpaqueSessionKeys, HydradxRuntimeOriginCaller, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletAssetRegistryMetadata, PalletClaimsEcdsaSignature, PalletDcaSchedule, PalletDemocracyConviction, PalletDemocracyVoteAccountVote, PalletElectionsPhragmenRenouncing, PalletIdentityBitFlags, PalletIdentityIdentityInfo, PalletIdentityJudgement, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletRouteExecutorTrade, PalletUniquesDestroyWitness, SpWeightsWeightV2Weight, XcmV3MultiLocation, XcmV3WeightLimit, XcmVersionedMultiAsset, XcmVersionedMultiAssets, XcmVersionedMultiLocation, XcmVersionedXcm } from '@polkadot/types/lookup';
+import type { CumulusPrimitivesParachainInherentParachainInherentData, FrameSupportPreimagesBounded, HydradxRuntimeOpaqueSessionKeys, HydradxRuntimeOriginCaller, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletAssetRegistryMetadata, PalletClaimsEcdsaSignature, PalletDcaSchedule, PalletDemocracyConviction, PalletDemocracyVoteAccountVote, PalletElectionsPhragmenRenouncing, PalletIdentityBitFlags, PalletIdentityIdentityInfo, PalletIdentityJudgement, PalletLbpWeightCurveType, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletRouteExecutorTrade, PalletUniquesDestroyWitness, SpWeightsWeightV2Weight, XcmV3MultiLocation, XcmV3WeightLimit, XcmVersionedMultiAsset, XcmVersionedMultiAssets, XcmVersionedMultiLocation, XcmVersionedXcm } from '@polkadot/types/lookup';
 
 export type __AugmentedSubmittable = AugmentedSubmittable<() => unknown>;
 export type __SubmittableExtrinsic<ApiType extends ApiTypes> = SubmittableExtrinsic<ApiType>;
@@ -30,7 +30,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * Emits 'Registered` event when successful.
        **/
-      register: AugmentedSubmittable<(name: Bytes | string | Uint8Array, assetType: PalletAssetRegistryAssetType | { Token: any } | { PoolShare: any } | string | Uint8Array, existentialDeposit: u128 | AnyNumber | Uint8Array, assetId: Option<u32> | null | Uint8Array | u32 | AnyNumber, metadata: Option<PalletAssetRegistryMetadata> | null | Uint8Array | PalletAssetRegistryMetadata | { symbol?: any; decimals?: any } | string, location: Option<HydradxRuntimeXcmAssetLocation> | null | Uint8Array | HydradxRuntimeXcmAssetLocation | { parents?: any; interior?: any } | string, xcmRateLimit: Option<u128> | null | Uint8Array | u128 | AnyNumber) => SubmittableExtrinsic<ApiType>, [Bytes, PalletAssetRegistryAssetType, u128, Option<u32>, Option<PalletAssetRegistryMetadata>, Option<HydradxRuntimeXcmAssetLocation>, Option<u128>]>;
+      register: AugmentedSubmittable<(name: Bytes | string | Uint8Array, assetType: PalletAssetRegistryAssetType | { Token: any } | { PoolShare: any } | { XYK: any } | { StableSwap: any } | { Bond: any } | string | Uint8Array, existentialDeposit: u128 | AnyNumber | Uint8Array, assetId: Option<u32> | null | Uint8Array | u32 | AnyNumber, metadata: Option<PalletAssetRegistryMetadata> | null | Uint8Array | PalletAssetRegistryMetadata | { symbol?: any; decimals?: any } | string, location: Option<HydradxRuntimeXcmAssetLocation> | null | Uint8Array | HydradxRuntimeXcmAssetLocation | { parents?: any; interior?: any } | string, xcmRateLimit: Option<u128> | null | Uint8Array | u128 | AnyNumber) => SubmittableExtrinsic<ApiType>, [Bytes, PalletAssetRegistryAssetType, u128, Option<u32>, Option<PalletAssetRegistryMetadata>, Option<HydradxRuntimeXcmAssetLocation>, Option<u128>]>;
       /**
        * Set asset native location.
        * 
@@ -58,7 +58,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * Emits `Updated` event when successful.
        **/
-      update: AugmentedSubmittable<(assetId: u32 | AnyNumber | Uint8Array, name: Bytes | string | Uint8Array, assetType: PalletAssetRegistryAssetType | { Token: any } | { PoolShare: any } | string | Uint8Array, existentialDeposit: Option<u128> | null | Uint8Array | u128 | AnyNumber, xcmRateLimit: Option<u128> | null | Uint8Array | u128 | AnyNumber) => SubmittableExtrinsic<ApiType>, [u32, Bytes, PalletAssetRegistryAssetType, Option<u128>, Option<u128>]>;
+      update: AugmentedSubmittable<(assetId: u32 | AnyNumber | Uint8Array, name: Bytes | string | Uint8Array, assetType: PalletAssetRegistryAssetType | { Token: any } | { PoolShare: any } | { XYK: any } | { StableSwap: any } | { Bond: any } | string | Uint8Array, existentialDeposit: Option<u128> | null | Uint8Array | u128 | AnyNumber, xcmRateLimit: Option<u128> | null | Uint8Array | u128 | AnyNumber) => SubmittableExtrinsic<ApiType>, [u32, Bytes, PalletAssetRegistryAssetType, Option<u128>, Option<u128>]>;
       /**
        * Generic tx
        **/
@@ -148,6 +148,51 @@ declare module '@polkadot/api-base/types/submittable' {
        * [`transfer`]: struct.Pallet.html#method.transfer
        **/
       transferKeepAlive: AugmentedSubmittable<(dest: AccountId32 | string | Uint8Array, value: Compact<u128> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [AccountId32, Compact<u128>]>;
+      /**
+       * Generic tx
+       **/
+      [key: string]: SubmittableExtrinsicFunction<ApiType>;
+    };
+    bonds: {
+      /**
+       * Issue new fungible bonds.
+       * New asset id is registered and assigned to the bonds.
+       * The number of bonds the issuer receives is 1:1 to the `amount` of the underlying asset
+       * minus the protocol fee.
+       * The bond asset is registered with the empty string for the asset name,
+       * and with the same existential deposit as of the underlying asset.
+       * Bonds can be redeemed for the underlying asset once mature.
+       * Protocol fee is applied to the amount, and transferred to `T::FeeReceiver`.
+       * When issuing new bonds with the underlying asset and maturity that matches existing bonds,
+       * new amount of these existing bonds is issued, instead of registering new bonds.
+       * It's possible to issue new bonds for bonds that are already mature.
+       * 
+       * Parameters:
+       * - `origin`: issuer of new bonds, needs to be `T::IssueOrigin`
+       * - `asset_id`: underlying asset id
+       * - `amount`: the amount of the underlying asset
+       * - `maturity`: Unix time in milliseconds, when the bonds will be mature.
+       * 
+       * Emits `BondTokenCreated` event when successful and new bonds were registered.
+       * Emits `BondsIssued` event when successful.
+       * 
+       **/
+      issue: AugmentedSubmittable<(assetId: u32 | AnyNumber | Uint8Array, amount: u128 | AnyNumber | Uint8Array, maturity: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u128, u64]>;
+      /**
+       * Redeem bonds for the underlying asset.
+       * The amount of the underlying asset the `origin` receives is 1:1 to the `amount` of the bonds.
+       * Anyone who holds the bonds is able to redeem them.
+       * Bonds can be both partially or fully redeemed.
+       * 
+       * Parameters:
+       * - `origin`: account id
+       * - `asset_id`: bond asset id
+       * - `amount`: the amount of the bonds to redeem for the underlying asset
+       * 
+       * Emits `BondsRedeemed` event when successful.
+       * 
+       **/
+      redeem: AugmentedSubmittable<(bondId: u32 | AnyNumber | Uint8Array, amount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u128]>;
       /**
        * Generic tx
        **/
@@ -1196,6 +1241,132 @@ declare module '@polkadot/api-base/types/submittable' {
        * # </weight>
        **/
       setSubs: AugmentedSubmittable<(subs: Vec<ITuple<[AccountId32, Data]>> | ([AccountId32 | string | Uint8Array, Data | { None: any } | { Raw: any } | { BlakeTwo256: any } | { Sha256: any } | { Keccak256: any } | { ShaThree256: any } | string | Uint8Array])[]) => SubmittableExtrinsic<ApiType>, [Vec<ITuple<[AccountId32, Data]>>]>;
+      /**
+       * Generic tx
+       **/
+      [key: string]: SubmittableExtrinsicFunction<ApiType>;
+    };
+    lbp: {
+      /**
+       * Add liquidity to a pool.
+       * 
+       * Assets to add has to match the pool assets. At least one amount has to be non-zero.
+       * 
+       * The dispatch origin for this call must be signed by the pool owner.
+       * 
+       * Parameters:
+       * - `pool_id`: The identifier of the pool
+       * - `amount_a`: The identifier of the asset and the amount to add.
+       * - `amount_b`: The identifier of the second asset and the amount to add.
+       * 
+       * Emits `LiquidityAdded` event when successful.
+       **/
+      addLiquidity: AugmentedSubmittable<(amountA: ITuple<[u32, u128]> | [u32 | AnyNumber | Uint8Array, u128 | AnyNumber | Uint8Array], amountB: ITuple<[u32, u128]> | [u32 | AnyNumber | Uint8Array, u128 | AnyNumber | Uint8Array]) => SubmittableExtrinsic<ApiType>, [ITuple<[u32, u128]>, ITuple<[u32, u128]>]>;
+      /**
+       * Trade `asset_in` for `asset_out`.
+       * 
+       * Executes a swap of `asset_in` for `asset_out`. Price is determined by the pool and is
+       * affected by the amount and the proportion of the pool assets and the weights.
+       * 
+       * Trading `fee` is distributed to the `fee_collector`.
+       * 
+       * Parameters:
+       * - `asset_in`: The identifier of the asset being transferred from the account to the pool.
+       * - `asset_out`: The identifier of the asset being transferred from the pool to the account.
+       * - `amount`: The amount of `asset_out`.
+       * - `max_limit`: maximum amount of `asset_in` to be sold in exchange for `asset_out`.
+       * 
+       * Emits `BuyExecuted` when successful.
+       **/
+      buy: AugmentedSubmittable<(assetOut: u32 | AnyNumber | Uint8Array, assetIn: u32 | AnyNumber | Uint8Array, amount: u128 | AnyNumber | Uint8Array, maxLimit: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u128, u128]>;
+      /**
+       * Create a new liquidity bootstrapping pool for given asset pair.
+       * 
+       * For any asset pair, only one pool can exist at a time.
+       * 
+       * The dispatch origin for this call must be `T::CreatePoolOrigin`.
+       * The pool is created with initial liquidity provided by the `pool_owner` who must have
+       * sufficient funds free.
+       * 
+       * The pool starts uninitialized and update_pool call should be called once created to set the start block.
+       * 
+       * This function should be dispatched from governing entity `T::CreatePoolOrigin`
+       * 
+       * Parameters:
+       * - `pool_owner`: the future owner of the new pool.
+       * - `asset_a`: { asset_id, amount } Asset ID and initial liquidity amount.
+       * - `asset_b`: { asset_id, amount } Asset ID and initial liquidity amount.
+       * - `initial_weight`: Initial weight of the asset_a. 1_000_000 corresponding to 1% and 100_000_000 to 100%
+       * this should be higher than final weight
+       * - `final_weight`: Final weight of the asset_a. 1_000_000 corresponding to 1% and 100_000_000 to 100%
+       * this should be lower than initial weight
+       * - `weight_curve`: The weight function used to update the LBP weights. Currently,
+       * there is only one weight function implemented, the linear function.
+       * - `fee`: The trading fee charged on every trade distributed to `fee_collector`.
+       * - `fee_collector`: The account to which trading fees will be transferred.
+       * - `repay_target`: The amount of tokens to repay to separate fee_collector account. Until this amount is
+       * reached, fee will be increased to 20% and taken from the pool
+       * 
+       * Emits `PoolCreated` event when successful.
+       * 
+       * BEWARE: We are taking the fee from the accumulated asset. If the accumulated asset is sold to the pool,
+       * the fee cost is transferred to the pool. If its bought from the pool the buyer bears the cost.
+       * This increases the price of the sold asset on every trade. Make sure to only run this with
+       * previously illiquid assets.
+       **/
+      createPool: AugmentedSubmittable<(poolOwner: AccountId32 | string | Uint8Array, assetA: u32 | AnyNumber | Uint8Array, assetAAmount: u128 | AnyNumber | Uint8Array, assetB: u32 | AnyNumber | Uint8Array, assetBAmount: u128 | AnyNumber | Uint8Array, initialWeight: u32 | AnyNumber | Uint8Array, finalWeight: u32 | AnyNumber | Uint8Array, weightCurve: PalletLbpWeightCurveType | 'Linear' | number | Uint8Array, fee: ITuple<[u32, u32]> | [u32 | AnyNumber | Uint8Array, u32 | AnyNumber | Uint8Array], feeCollector: AccountId32 | string | Uint8Array, repayTarget: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [AccountId32, u32, u128, u32, u128, u32, u32, PalletLbpWeightCurveType, ITuple<[u32, u32]>, AccountId32, u128]>;
+      /**
+       * Transfer all the liquidity from a pool back to the pool owner and destroy the pool.
+       * The pool data are also removed from the storage.
+       * 
+       * The pool can't be destroyed during the sale.
+       * 
+       * The dispatch origin for this call must be signed by the pool owner.
+       * 
+       * Parameters:
+       * - `amount_a`: The identifier of the asset and the amount to add.
+       * 
+       * Emits 'LiquidityRemoved' when successful.
+       **/
+      removeLiquidity: AugmentedSubmittable<(poolId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [AccountId32]>;
+      /**
+       * Trade `asset_in` for `asset_out`.
+       * 
+       * Executes a swap of `asset_in` for `asset_out`. Price is determined by the pool and is
+       * affected by the amount and proportion of the pool assets and the weights.
+       * 
+       * Trading `fee` is distributed to the `fee_collector`.
+       * 
+       * Parameters:
+       * - `asset_in`: The identifier of the asset being transferred from the account to the pool.
+       * - `asset_out`: The identifier of the asset being transferred from the pool to the account.
+       * - `amount`: The amount of `asset_in`
+       * - `max_limit`: minimum amount of `asset_out` / amount of asset_out to be obtained from the pool in exchange for `asset_in`.
+       * 
+       * Emits `SellExecuted` when successful.
+       **/
+      sell: AugmentedSubmittable<(assetIn: u32 | AnyNumber | Uint8Array, assetOut: u32 | AnyNumber | Uint8Array, amount: u128 | AnyNumber | Uint8Array, maxLimit: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u128, u128]>;
+      /**
+       * Update pool data of a pool.
+       * 
+       * The dispatch origin for this call must be signed by the pool owner.
+       * 
+       * The pool can be updated only if the sale has not already started.
+       * 
+       * At least one of the following optional parameters has to be specified.
+       * 
+       * Parameters:
+       * - `pool_id`: The identifier of the pool to be updated.
+       * - `start`: The new starting time of the sale. This parameter is optional.
+       * - `end`: The new ending time of the sale. This parameter is optional.
+       * - `initial_weight`: The new initial weight. This parameter is optional.
+       * - `final_weight`: The new final weight. This parameter is optional.
+       * - `fee`: The new trading fee charged on every trade. This parameter is optional.
+       * - `fee_collector`: The new receiver of trading fees. This parameter is optional.
+       * 
+       * Emits `PoolUpdated` event when successful.
+       **/
+      updatePoolData: AugmentedSubmittable<(poolId: AccountId32 | string | Uint8Array, poolOwner: Option<AccountId32> | null | Uint8Array | AccountId32 | string, start: Option<u32> | null | Uint8Array | u32 | AnyNumber, end: Option<u32> | null | Uint8Array | u32 | AnyNumber, initialWeight: Option<u32> | null | Uint8Array | u32 | AnyNumber, finalWeight: Option<u32> | null | Uint8Array | u32 | AnyNumber, fee: Option<ITuple<[u32, u32]>> | null | Uint8Array | ITuple<[u32, u32]> | [u32 | AnyNumber | Uint8Array, u32 | AnyNumber | Uint8Array], feeCollector: Option<AccountId32> | null | Uint8Array | AccountId32 | string, repayTarget: Option<u128> | null | Uint8Array | u128 | AnyNumber) => SubmittableExtrinsic<ApiType>, [AccountId32, Option<AccountId32>, Option<u32>, Option<u32>, Option<u32>, Option<u32>, Option<ITuple<[u32, u32]>>, Option<AccountId32>, Option<u128>]>;
       /**
        * Generic tx
        **/
@@ -2319,6 +2490,90 @@ declare module '@polkadot/api-base/types/submittable' {
        * # </weight>
        **/
       setKeys: AugmentedSubmittable<(keys: HydradxRuntimeOpaqueSessionKeys | { aura?: any } | string | Uint8Array, proof: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [HydradxRuntimeOpaqueSessionKeys, Bytes]>;
+      /**
+       * Generic tx
+       **/
+      [key: string]: SubmittableExtrinsicFunction<ApiType>;
+    };
+    staking: {
+      /**
+       * Claim rewards accumulated for specific staking position.
+       * 
+       * Function calculates amount of rewards to pay for specified staking position based on
+       * the amount of points position accumulated. Function also unlocks portion of the rewards locked
+       * from `increase_stake` based on the amount of the points.
+       * 
+       * This action is penalized by removing all the points and returning allocated unpaid rewards
+       * for redistribution.
+       * 
+       * Parameters:
+       * - `position_id`: The identifier of the position to claim rewards for.
+       * 
+       * Emits `RewardsClaimed` event when successful.
+       * 
+       **/
+      claim: AugmentedSubmittable<(positionId: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u128]>;
+      /**
+       * Extrinsic to increase staked amount of existing staking position by specified `amount`.
+       * 
+       * `increase_stake` increases staked amount of position specified by `postion_id` by the
+       * `amount` specified by the user.
+       * Staking position must exist and `origin` has to be the owner of the position.
+       * Users can stake tokens which are not vested or already staked.
+       * Position's params e.g points are updated to offset stake increase and rewards
+       * accumulated until this point are paid and locked to the user.
+       * 
+       * Parameters:
+       * - `position_id`: The identifier of the position which stake will be increased.
+       * - `amount`: Amount of native asset to be added to staked amount. `amount` can't be vested or
+       * already staked
+       * 
+       * Emits `StakeAdded` event when successful.
+       * 
+       **/
+      increaseStake: AugmentedSubmittable<(positionId: u128 | AnyNumber | Uint8Array, amount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u128, u128]>;
+      /**
+       * Staking pallet initialization. This call will reserved `pot`'s balance to prevent
+       * account dusting and start collecting fees from trades as rewards.
+       * 
+       * `pot`’s account has to have a balance which will be reserved to prevent account dusting.
+       * 
+       * Emits `StakingInitialized` event when successful.
+       * 
+       **/
+      initializeStaking: AugmentedSubmittable<() => SubmittableExtrinsic<ApiType>, []>;
+      /**
+       * Stake `amount` into a new staking position.
+       * 
+       * `stake` locks specified `amount` into staking and creates new NFT representing staking
+       * position.
+       * Users can stake `NativeAssetId` balance which is not vested or already staked.
+       * 
+       * Staking pallet must be initialized otherwise extrinsic will fail with error.
+       * 
+       * Parameters:
+       * - `amount`: Amount of native asset to be staked. `amount` can't be vested or already
+       * staked
+       * 
+       * Emits `PositionCreated` event when successful.
+       * 
+       **/
+      stake: AugmentedSubmittable<(amount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u128]>;
+      /**
+       * Function pays rewards, unlocks all the staked assets and destroys staking position
+       * specified by `position_id`.
+       * 
+       * Function calculates and pays latest rewards, unlocks all the locked rewards and staked
+       * tokens for staking position and burns NFT representing staking position.
+       * Unpaid allocated rewards are returned to the Staking for redistribution.
+       * 
+       * Parameters:
+       * - `position_id`: The identifier of the position to be destroyed.
+       * 
+       * Emits `Unstaked` event when successful.
+       * 
+       **/
+      unstake: AugmentedSubmittable<(positionId: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u128]>;
       /**
        * Generic tx
        **/
