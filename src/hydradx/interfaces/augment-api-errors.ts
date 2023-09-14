@@ -1486,6 +1486,120 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
+    stableswap: {
+      /**
+       * Asset is already in the pool.
+       **/
+      AssetInPool: AugmentedError<ApiType>;
+      /**
+       * Asset is not in the pool.
+       **/
+      AssetNotInPool: AugmentedError<ApiType>;
+      /**
+       * One or more assets are not registered in AssetRegistry
+       **/
+      AssetNotRegistered: AugmentedError<ApiType>;
+      /**
+       * Account balance is too low.
+       **/
+      BalanceTooLow: AugmentedError<ApiType>;
+      /**
+       * Minimum limit has not been reached during trade.
+       **/
+      BuyLimitNotReached: AugmentedError<ApiType>;
+      /**
+       * Creating a pool with same assets or less than 2 assets is not allowed.
+       **/
+      IncorrectAssets: AugmentedError<ApiType>;
+      /**
+       * Balance of an asset is not sufficient to perform a trade.
+       **/
+      InsufficientBalance: AugmentedError<ApiType>;
+      /**
+       * Liquidity has not reached the required minimum.
+       **/
+      InsufficientLiquidity: AugmentedError<ApiType>;
+      /**
+       * Insufficient liquidity left in the pool after withdrawal.
+       **/
+      InsufficientLiquidityRemaining: AugmentedError<ApiType>;
+      /**
+       * Remaining balance of share asset is below asset's existential deposit.
+       **/
+      InsufficientShareBalance: AugmentedError<ApiType>;
+      /**
+       * Balance of a share asset is not sufficient to withdraw liquidity.
+       **/
+      InsufficientShares: AugmentedError<ApiType>;
+      /**
+       * Amount is less than the minimum trading amount configured.
+       **/
+      InsufficientTradingAmount: AugmentedError<ApiType>;
+      /**
+       * Amplification is outside configured range.
+       **/
+      InvalidAmplification: AugmentedError<ApiType>;
+      /**
+       * Invalid asset amount provided. Amount must be greater than zero.
+       **/
+      InvalidAssetAmount: AugmentedError<ApiType>;
+      /**
+       * Initial liquidity of asset must be > 0.
+       **/
+      InvalidInitialLiquidity: AugmentedError<ApiType>;
+      /**
+       * Maximum number of assets has been exceeded.
+       **/
+      MaxAssetsExceeded: AugmentedError<ApiType>;
+      /**
+       * Desired amount not reached.
+       **/
+      MinimumAmountNotReached: AugmentedError<ApiType>;
+      /**
+       * Not allowed to perform an operation on given asset.
+       **/
+      NotAllowed: AugmentedError<ApiType>;
+      /**
+       * Future block number is in the past.
+       **/
+      PastBlock: AugmentedError<ApiType>;
+      /**
+       * A pool with given assets already exists.
+       **/
+      PoolExists: AugmentedError<ApiType>;
+      /**
+       * A pool with given assets does not exist.
+       **/
+      PoolNotFound: AugmentedError<ApiType>;
+      /**
+       * New amplification is equal to the previous value.
+       **/
+      SameAmplification: AugmentedError<ApiType>;
+      /**
+       * Maximum limit has been exceeded during trade.
+       **/
+      SellLimitExceeded: AugmentedError<ApiType>;
+      /**
+       * Share asset is amount assets when creating a pool.
+       **/
+      ShareAssetInPoolAssets: AugmentedError<ApiType>;
+      /**
+       * Share asset is not registered in Registry.
+       **/
+      ShareAssetNotRegistered: AugmentedError<ApiType>;
+      /**
+       * Slippage
+       **/
+      SlippageLimit: AugmentedError<ApiType>;
+      /**
+       * Failed to retrieve asset decimals.
+       **/
+      UnknownDecimals: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
     staking: {
       /**
        * Staking is already initialized.

@@ -10,7 +10,7 @@ import type { Data } from '@polkadot/types';
 import type { Bytes, Compact, Option, U8aFixed, Vec, bool, i128, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { AnyNumber, IMethod, ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, Call, H256, Permill, Perquintill } from '@polkadot/types/interfaces/runtime';
-import type { CumulusPrimitivesParachainInherentParachainInherentData, FrameSupportPreimagesBounded, HydradxRuntimeOpaqueSessionKeys, HydradxRuntimeOriginCaller, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletAssetRegistryMetadata, PalletClaimsEcdsaSignature, PalletDcaSchedule, PalletDemocracyConviction, PalletDemocracyVoteAccountVote, PalletElectionsPhragmenRenouncing, PalletIdentityBitFlags, PalletIdentityIdentityInfo, PalletIdentityJudgement, PalletLbpWeightCurveType, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletRouteExecutorTrade, PalletUniquesDestroyWitness, SpWeightsWeightV2Weight, XcmV3MultiLocation, XcmV3WeightLimit, XcmVersionedMultiAsset, XcmVersionedMultiAssets, XcmVersionedMultiLocation, XcmVersionedXcm } from '@polkadot/types/lookup';
+import type { CumulusPrimitivesParachainInherentParachainInherentData, FrameSupportPreimagesBounded, HydradxRuntimeOpaqueSessionKeys, HydradxRuntimeOriginCaller, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletAssetRegistryMetadata, PalletClaimsEcdsaSignature, PalletDcaSchedule, PalletDemocracyConviction, PalletDemocracyVoteAccountVote, PalletElectionsPhragmenRenouncing, PalletIdentityBitFlags, PalletIdentityIdentityInfo, PalletIdentityJudgement, PalletLbpWeightCurveType, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletRouteExecutorTrade, PalletStableswapAssetAmount, PalletStableswapTradability, PalletUniquesDestroyWitness, SpWeightsWeightV2Weight, XcmV3MultiLocation, XcmV3WeightLimit, XcmVersionedMultiAsset, XcmVersionedMultiAssets, XcmVersionedMultiLocation, XcmVersionedXcm } from '@polkadot/types/lookup';
 
 export type __AugmentedSubmittable = AugmentedSubmittable<() => unknown>;
 export type __SubmittableExtrinsic<ApiType extends ApiTypes> = SubmittableExtrinsic<ApiType>;
@@ -2490,6 +2490,151 @@ declare module '@polkadot/api-base/types/submittable' {
        * # </weight>
        **/
       setKeys: AugmentedSubmittable<(keys: HydradxRuntimeOpaqueSessionKeys | { aura?: any } | string | Uint8Array, proof: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [HydradxRuntimeOpaqueSessionKeys, Bytes]>;
+      /**
+       * Generic tx
+       **/
+      [key: string]: SubmittableExtrinsicFunction<ApiType>;
+    };
+    stableswap: {
+      /**
+       * Add liquidity to selected pool.
+       * 
+       * First call of `add_liquidity` adds "initial liquidity" of all assets.
+       * 
+       * If there is liquidity already in the pool, LP can provide liquidity of any number of pool assets.
+       * 
+       * LP must have sufficient amount of each assets.
+       * 
+       * Origin is given corresponding amount of shares.
+       * 
+       * Parameters:
+       * - `origin`: liquidity provider
+       * - `pool_id`: Pool Id
+       * - `assets`: asset id and liquidity amount provided
+       * 
+       * Emits `LiquidityAdded` event when successful.
+       **/
+      addLiquidity: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, assets: Vec<PalletStableswapAssetAmount> | (PalletStableswapAssetAmount | { assetId?: any; amount?: any } | string | Uint8Array)[]) => SubmittableExtrinsic<ApiType>, [u32, Vec<PalletStableswapAssetAmount>]>;
+      /**
+       * Add liquidity to selected pool given exact amount of shares to receive.
+       * 
+       * Parameters:
+       * - `origin`: liquidity provider
+       * - `pool_id`: Pool Id
+       * - `shares`: amount of shares to receive
+       * - `asset_id`: asset id of an asset to provide as liquidity
+       * - `max_asset_amount`: slippage limit. Max amount of asset.
+       * 
+       * Emits `LiquidityAdded` event when successful.
+       **/
+      addLiquidityShares: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, shares: u128 | AnyNumber | Uint8Array, assetId: u32 | AnyNumber | Uint8Array, maxAssetAmount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u128, u32, u128]>;
+      /**
+       * Execute a swap of `asset_in` for `asset_out` by specifying how much to get out.
+       * 
+       * Parameters:
+       * - `origin`:
+       * - `pool_id`: Id of a pool
+       * - `asset_out`: ID of asset bought from the pool
+       * - `asset_in`: ID of asset sold to the pool
+       * - `amount_out`: Amount of asset to receive from the pool
+       * - `max_sell_amount`: Maximum amount allowed to be sold
+       * 
+       * Emits `BuyExecuted` event when successful.
+       * 
+       **/
+      buy: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, assetOut: u32 | AnyNumber | Uint8Array, assetIn: u32 | AnyNumber | Uint8Array, amountOut: u128 | AnyNumber | Uint8Array, maxSellAmount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u32, u128, u128]>;
+      /**
+       * Create a stableswap pool with given list of asset
+       * 
+       * All assets must be correctly registered in `T::AssetRegistry`.
+       * Note that this does not seed the pool with liquidity. Use `add_liquidity` to provide
+       * initial liquidity.
+       * 
+       * Parameters:
+       * - `origin`: Must be T::AuthorityOrigin
+       * - `share_asset`: Preregistered share asset identifier
+       * - `assets`: List of Asset ids
+       * - `amplification`: Pool amplification
+       * - `fee`: fee to be applied on trade and liquidity operations
+       * 
+       * Emits `PoolCreated` event if successful.
+       **/
+      createPool: AugmentedSubmittable<(shareAsset: u32 | AnyNumber | Uint8Array, assets: Vec<u32> | (u32 | AnyNumber | Uint8Array)[], amplification: u16 | AnyNumber | Uint8Array, fee: Permill | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, Vec<u32>, u16, Permill]>;
+      /**
+       * Remove liquidity from selected pool.
+       * 
+       * Withdraws liquidity of selected asset from a pool.
+       * 
+       * Share amount is burn and LP receives corresponding amount of chosen asset.
+       * 
+       * Withdraw fee is applied to the asset amount.
+       * 
+       * Parameters:
+       * - `origin`: liquidity provider
+       * - `pool_id`: Pool Id
+       * - `asset_id`: id of asset to receive
+       * - 'share_amount': amount of shares to withdraw
+       * - 'min_amount_out': minimum amount to receive
+       * 
+       * Emits `LiquidityRemoved` event when successful.
+       **/
+      removeLiquidityOneAsset: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, assetId: u32 | AnyNumber | Uint8Array, shareAmount: u128 | AnyNumber | Uint8Array, minAmountOut: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u128, u128]>;
+      /**
+       * Execute a swap of `asset_in` for `asset_out` by specifying how much to put in.
+       * 
+       * Parameters:
+       * - `origin`: origin of the caller
+       * - `pool_id`: Id of a pool
+       * - `asset_in`: ID of asset sold to the pool
+       * - `asset_out`: ID of asset bought from the pool
+       * - `amount_in`: Amount of asset to be sold to the pool
+       * - `min_buy_amount`: Minimum amount required to receive
+       * 
+       * Emits `SellExecuted` event when successful.
+       * 
+       **/
+      sell: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, assetIn: u32 | AnyNumber | Uint8Array, assetOut: u32 | AnyNumber | Uint8Array, amountIn: u128 | AnyNumber | Uint8Array, minBuyAmount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u32, u128, u128]>;
+      setAssetTradableState: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, assetId: u32 | AnyNumber | Uint8Array, state: PalletStableswapTradability | { bits?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, PalletStableswapTradability]>;
+      /**
+       * Update pool's amplification.
+       * 
+       * Parameters:
+       * - `origin`: Must be T::AuthorityOrigin
+       * - `pool_id`: pool to update
+       * - `future_amplification`: new desired pool amplification
+       * - `future_block`: future block number when the amplification is updated
+       * 
+       * Emits `AmplificationUpdated` event if successful.
+       **/
+      updateAmplification: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, finalAmplification: u16 | AnyNumber | Uint8Array, startBlock: u32 | AnyNumber | Uint8Array, endBlock: u32 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u16, u32, u32]>;
+      /**
+       * Update pool's fees.
+       * 
+       * Updates pool's trade fee and/or withdraw fee.
+       * 
+       * if pool does not exist, `PoolNotFound` is returned.
+       * 
+       * Parameters:
+       * - `origin`: Must be T::AuthorityOrigin
+       * - `pool_id`: pool to update
+       * - `fee`: new pool fee
+       * 
+       * Emits `FeeUpdated` event if successful.
+       **/
+      updatePoolFee: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, fee: Permill | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, Permill]>;
+      /**
+       * Remove liquidity from selected pool by specifying exact amount of asset to receive.
+       * 
+       * Parameters:
+       * - `origin`: liquidity provider
+       * - `pool_id`: Pool Id
+       * - `asset_id`: id of asset to receive
+       * - 'amount': amount of asset to receive
+       * - 'max_share_amount': Slippage limit. Max amount of shares to burn.
+       * 
+       * Emits `LiquidityRemoved` event when successful.
+       **/
+      withdrawAssetAmount: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, assetId: u32 | AnyNumber | Uint8Array, amount: u128 | AnyNumber | Uint8Array, maxShareAmount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u128, u128]>;
       /**
        * Generic tx
        **/

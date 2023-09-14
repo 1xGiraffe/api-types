@@ -9,7 +9,7 @@ import type { ApiTypes, AugmentedEvent } from '@polkadot/api-base/types';
 import type { Bytes, Null, Option, Result, U8aFixed, Vec, bool, i128, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, H256, Permill, Perquintill } from '@polkadot/types/interfaces/runtime';
-import type { FrameSupportDispatchDispatchInfo, FrameSupportTokensMiscBalanceStatus, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletClaimsEthereumAddress, PalletDemocracyVoteAccountVote, PalletDemocracyVoteThreshold, PalletLbpPool, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, SpRuntimeDispatchError, SpWeightsWeightV2Weight, XcmV3MultiAsset, XcmV3MultiLocation, XcmV3MultiassetMultiAssets, XcmV3Response, XcmV3TraitsError, XcmV3TraitsOutcome, XcmV3Xcm, XcmVersionedMultiAssets, XcmVersionedMultiLocation } from '@polkadot/types/lookup';
+import type { FrameSupportDispatchDispatchInfo, FrameSupportTokensMiscBalanceStatus, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletClaimsEthereumAddress, PalletDemocracyVoteAccountVote, PalletDemocracyVoteThreshold, PalletLbpPool, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletStableswapAssetAmount, PalletStableswapTradability, SpRuntimeDispatchError, SpWeightsWeightV2Weight, XcmV3MultiAsset, XcmV3MultiLocation, XcmV3MultiassetMultiAssets, XcmV3Response, XcmV3TraitsError, XcmV3TraitsOutcome, XcmV3Xcm, XcmVersionedMultiAssets, XcmVersionedMultiLocation } from '@polkadot/types/lookup';
 
 export type __AugmentedEvent<ApiType extends ApiTypes> = AugmentedEvent<ApiType>;
 
@@ -1029,6 +1029,44 @@ declare module '@polkadot/api-base/types/events' {
        * block number as the type might suggest.
        **/
       NewSession: AugmentedEvent<ApiType, [sessionIndex: u32], { sessionIndex: u32 }>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
+    };
+    stableswap: {
+      /**
+       * AAmplification of a pool has been scheduled to change.
+       **/
+      AmplificationChanging: AugmentedEvent<ApiType, [poolId: u32, currentAmplification: u16, finalAmplification: u16, startBlock: u32, endBlock: u32], { poolId: u32, currentAmplification: u16, finalAmplification: u16, startBlock: u32, endBlock: u32 }>;
+      /**
+       * Buy trade executed. Trade fee paid in asset entering the pool (already included in amount_in).
+       **/
+      BuyExecuted: AugmentedEvent<ApiType, [who: AccountId32, poolId: u32, assetIn: u32, assetOut: u32, amountIn: u128, amountOut: u128, fee: u128], { who: AccountId32, poolId: u32, assetIn: u32, assetOut: u32, amountIn: u128, amountOut: u128, fee: u128 }>;
+      /**
+       * Pool parameters has been updated.
+       **/
+      FeeUpdated: AugmentedEvent<ApiType, [poolId: u32, fee: Permill], { poolId: u32, fee: Permill }>;
+      /**
+       * Liquidity of an asset was added to a pool.
+       **/
+      LiquidityAdded: AugmentedEvent<ApiType, [poolId: u32, who: AccountId32, shares: u128, assets: Vec<PalletStableswapAssetAmount>], { poolId: u32, who: AccountId32, shares: u128, assets: Vec<PalletStableswapAssetAmount> }>;
+      /**
+       * Liquidity removed.
+       **/
+      LiquidityRemoved: AugmentedEvent<ApiType, [poolId: u32, who: AccountId32, shares: u128, amounts: Vec<PalletStableswapAssetAmount>, fee: u128], { poolId: u32, who: AccountId32, shares: u128, amounts: Vec<PalletStableswapAssetAmount>, fee: u128 }>;
+      /**
+       * A pool was created.
+       **/
+      PoolCreated: AugmentedEvent<ApiType, [poolId: u32, assets: Vec<u32>, amplification: u16, fee: Permill], { poolId: u32, assets: Vec<u32>, amplification: u16, fee: Permill }>;
+      /**
+       * Sell trade executed. Trade fee paid in asset leaving the pool (already subtracted from amount_out).
+       **/
+      SellExecuted: AugmentedEvent<ApiType, [who: AccountId32, poolId: u32, assetIn: u32, assetOut: u32, amountIn: u128, amountOut: u128, fee: u128], { who: AccountId32, poolId: u32, assetIn: u32, assetOut: u32, amountIn: u128, amountOut: u128, fee: u128 }>;
+      /**
+       * Aseet's tradable state has been updated.
+       **/
+      TradableStateUpdated: AugmentedEvent<ApiType, [poolId: u32, assetId: u32, state: PalletStableswapTradability], { poolId: u32, assetId: u32, state: PalletStableswapTradability }>;
       /**
        * Generic event
        **/

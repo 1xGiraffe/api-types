@@ -6,7 +6,7 @@
 import '@polkadot/api-base/types/consts';
 
 import type { ApiTypes, AugmentedConst } from '@polkadot/api-base/types';
-import type { Option, U8aFixed, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
+import type { Option, RangeInclusive, U8aFixed, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { Codec, ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, Perbill, Percent, Permill } from '@polkadot/types/interfaces/runtime';
 import type { FrameSupportPalletId, FrameSystemLimitsBlockLength, FrameSystemLimitsBlockWeights, HydradxTraitsOracleOraclePeriod, PalletDynamicFeesFeeParams, SpVersionRuntimeVersion, SpWeightsRuntimeDbWeight, SpWeightsWeightV2Weight, XcmV3MultiLocation } from '@polkadot/types/lookup';
@@ -551,6 +551,24 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       [key: string]: Codec;
     };
+    stableswap: {
+      /**
+       * Amplification inclusive range. Pool's amp can be selected from the range only.
+       **/
+      amplificationRange: RangeInclusive<u16> & AugmentedConst<ApiType>;
+      /**
+       * Minimum pool liquidity
+       **/
+      minPoolLiquidity: u128 & AugmentedConst<ApiType>;
+      /**
+       * Minimum trading amount
+       **/
+      minTradingLimit: u128 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
     staking: {
       /**
        * Weight of the action points in total points calculations.
@@ -584,11 +602,6 @@ declare module '@polkadot/api-base/types/consts' {
        * Staking period length in blocks.
        **/
       periodLength: u32 & AugmentedConst<ApiType>;
-      /**
-       * Unit we are distributing action points for.
-       * e.g if RewardedVoteUnit is 1HDX user will receive `x` action points per each voted 1 HDX.
-       **/
-      rewardedVoteUnit: u128 & AugmentedConst<ApiType>;
       /**
        * Number of time points users receive for each period.
        **/
