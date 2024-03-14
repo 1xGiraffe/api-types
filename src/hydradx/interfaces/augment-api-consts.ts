@@ -9,7 +9,7 @@ import type { ApiTypes, AugmentedConst } from '@polkadot/api-base/types';
 import type { Option, RangeInclusive, U8aFixed, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { Codec, ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, Perbill, Percent, Permill } from '@polkadot/types/interfaces/runtime';
-import type { FrameSupportPalletId, FrameSystemLimitsBlockLength, FrameSystemLimitsBlockWeights, HydradxTraitsOracleOraclePeriod, PalletDynamicFeesFeeParams, SpVersionRuntimeVersion, SpWeightsRuntimeDbWeight, SpWeightsWeightV2Weight, XcmV3MultiLocation } from '@polkadot/types/lookup';
+import type { FrameSupportPalletId, FrameSystemLimitsBlockLength, FrameSystemLimitsBlockWeights, HydradxTraitsOracleOraclePeriod, PalletDynamicFeesFeeParams, SpVersionRuntimeVersion, SpWeightsRuntimeDbWeight, SpWeightsWeightV2Weight, StagingXcmV3MultiLocation } from '@polkadot/types/lookup';
 
 export type __AugmentedConst<ApiType extends ApiTypes> = AugmentedConst<ApiType>;
 
@@ -17,10 +17,18 @@ declare module '@polkadot/api-base/types/consts' {
   interface AugmentedConsts<ApiType extends ApiTypes> {
     assetRegistry: {
       /**
-       * Native Asset Id
+       * The min length of a name or symbol stored on-chain.
        **/
-      nativeAssetId: u32 & AugmentedConst<ApiType>;
+      minStringLimit: u32 & AugmentedConst<ApiType>;
+      /**
+       * Weight multiplier for `register_external` extrinsic
+       **/
+      regExternalWeightMultiplier: u64 & AugmentedConst<ApiType>;
       sequentialIdStartAt: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum length of a name or symbol stored on-chain.
+       **/
+      stringLimit: u32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -28,9 +36,24 @@ declare module '@polkadot/api-base/types/consts' {
     };
     balances: {
       /**
-       * The minimum amount required to keep an account open.
+       * The minimum amount required to keep an account open. MUST BE GREATER THAN ZERO!
+       * 
+       * If you *really* need it to be zero, you can enable the feature `insecure_zero_ed` for
+       * this pallet. However, you do so at your own risk: this will open up a major DoS vector.
+       * In case you have multiple sources of provider references, you may also get unexpected
+       * behaviour if you set this to zero.
+       * 
+       * Bottom line: Do yourself a favour and make it at least one!
        **/
       existentialDeposit: u128 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of individual freeze locks that can exist on an account at any time.
+       **/
+      maxFreezes: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of holds that can exist on an account at any time.
+       **/
+      maxHolds: u32 & AugmentedConst<ApiType>;
       /**
        * The maximum number of locks that should exist on an account.
        * Not strictly enforced, but used for weight estimation.
@@ -95,6 +118,16 @@ declare module '@polkadot/api-base/types/consts' {
        * Reward amount per one collator.
        **/
       rewardPerCollator: u128 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    council: {
+      /**
+       * The maximum weight of a dispatch call that can be proposed and executed.
+       **/
+      maxProposalWeight: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -225,6 +258,16 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       [key: string]: Codec;
     };
+    dynamicEvmFee: {
+      /**
+       * WETH Asset Id
+       **/
+      wethAssetId: u32 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
     dynamicFees: {
       assetFeeParameters: PalletDynamicFeesFeeParams & AugmentedConst<ApiType>;
       protocolFeeParameters: PalletDynamicFeesFeeParams & AugmentedConst<ApiType>;
@@ -249,18 +292,28 @@ declare module '@polkadot/api-base/types/consts' {
       /**
        * The maximum number of candidates in a phragmen election.
        * 
-       * Warning: The election happens onchain, and this value will determine
-       * the size of the election. When this limit is reached no more
-       * candidates are accepted in the election.
+       * Warning: This impacts the size of the election which is run onchain. Chose wisely, and
+       * consider how it will impact `T::WeightInfo::election_phragmen`.
+       * 
+       * When this limit is reached no more candidates are accepted in the election.
        **/
       maxCandidates: u32 & AugmentedConst<ApiType>;
       /**
        * The maximum number of voters to allow in a phragmen election.
        * 
-       * Warning: This impacts the size of the election which is run onchain.
+       * Warning: This impacts the size of the election which is run onchain. Chose wisely, and
+       * consider how it will impact `T::WeightInfo::election_phragmen`.
+       * 
        * When the limit is reached the new voters are ignored.
        **/
       maxVoters: u32 & AugmentedConst<ApiType>;
+      /**
+       * Maximum numbers of votes per voter.
+       * 
+       * Warning: This impacts the size of the election which is run onchain. Chose wisely, and
+       * consider how it will impact `T::WeightInfo::election_phragmen`.
+       **/
+      maxVotesPerVoter: u32 & AugmentedConst<ApiType>;
       /**
        * Identifier for the elections-phragmen pallet's lock
        **/
@@ -292,6 +345,16 @@ declare module '@polkadot/api-base/types/consts' {
        * Maximum number of unique oracle entries expected in one block.
        **/
       maxUniqueEntries: u32 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    evmAccounts: {
+      /**
+       * Fee multiplier for the binding of addresses.
+       **/
+      feeMultiplier: u32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -423,10 +486,6 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       nftCollectionId: u128 & AugmentedConst<ApiType>;
       /**
-       * Preferred stable Asset ID
-       **/
-      stableCoinAssetId: u32 & AugmentedConst<ApiType>;
-      /**
        * Generic const
        **/
       [key: string]: Codec;
@@ -527,11 +586,42 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       [key: string]: Codec;
     };
+    referrals: {
+      /**
+       * Maximum referral code length.
+       **/
+      codeLength: u32 & AugmentedConst<ApiType>;
+      /**
+       * Minimum referral code length.
+       **/
+      minCodeLength: u32 & AugmentedConst<ApiType>;
+      /**
+       * Pallet id. Determines account which holds accumulated rewards in various assets.
+       **/
+      palletId: FrameSupportPalletId & AugmentedConst<ApiType>;
+      /**
+       * Registration fee details.
+       * (ID of an asset which fee is to be paid in, Amount, Beneficiary account)
+       **/
+      registrationFee: ITuple<[u32, u128, AccountId32]> & AugmentedConst<ApiType>;
+      /**
+       * ID of an asset that is used to distribute rewards in.
+       **/
+      rewardAsset: u32 & AugmentedConst<ApiType>;
+      /**
+       * Seed amount that was sent to the reward pot.
+       **/
+      seedNativeAmount: u128 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
     router: {
       /**
-       * Max limit for the number of trades within a route
+       * Native Asset Id
        **/
-      maxNumberOfTrades: u8 & AugmentedConst<ApiType>;
+      nativeAssetId: u32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -544,6 +634,10 @@ declare module '@polkadot/api-base/types/consts' {
       maximumWeight: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
       /**
        * The maximum number of scheduled calls in the queue for a single block.
+       * 
+       * NOTE:
+       * + Dependent pallets' benchmarks might require a higher limit for the setting. Set a
+       * higher limit under `runtime-benchmarks` feature.
        **/
       maxScheduledPerBlock: u32 & AugmentedConst<ApiType>;
       /**
@@ -649,6 +743,16 @@ declare module '@polkadot/api-base/types/consts' {
        * Get the chain's current version.
        **/
       version: SpVersionRuntimeVersion & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    technicalCommittee: {
+      /**
+       * The maximum weight of a dispatch call that can be proposed and executed.
+       **/
+      maxProposalWeight: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -832,6 +936,20 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       [key: string]: Codec;
     };
+    xcmRateLimiter: {
+      /**
+       * Defer duration base to be used for calculating the specific defer duration for any asset
+       **/
+      deferDuration: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of blocks to defer XCMs by.
+       **/
+      maxDeferDuration: u32 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
     xTokens: {
       /**
        * Base XCM weight.
@@ -843,7 +961,41 @@ declare module '@polkadot/api-base/types/consts' {
       /**
        * Self chain location.
        **/
-      selfLocation: XcmV3MultiLocation & AugmentedConst<ApiType>;
+      selfLocation: StagingXcmV3MultiLocation & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    xyk: {
+      /**
+       * Trading fee rate
+       **/
+      getExchangeFee: ITuple<[u32, u32]> & AugmentedConst<ApiType>;
+      /**
+       * Max fraction of pool to sell in single transaction
+       **/
+      maxInRatio: u128 & AugmentedConst<ApiType>;
+      /**
+       * Max fraction of pool to buy in single transaction
+       **/
+      maxOutRatio: u128 & AugmentedConst<ApiType>;
+      /**
+       * Minimum pool liquidity
+       **/
+      minPoolLiquidity: u128 & AugmentedConst<ApiType>;
+      /**
+       * Minimum trading limit
+       **/
+      minTradingLimit: u128 & AugmentedConst<ApiType>;
+      /**
+       * Native Asset Id
+       **/
+      nativeAssetId: u32 & AugmentedConst<ApiType>;
+      /**
+       * Oracle source identifier for this pallet.
+       **/
+      oracleSource: U8aFixed & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/

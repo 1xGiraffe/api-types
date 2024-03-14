@@ -13,9 +13,17 @@ declare module '@polkadot/api-base/types/errors' {
   interface AugmentedErrors<ApiType extends ApiTypes> {
     assetRegistry: {
       /**
+       * Asset is already banned.
+       **/
+      AssetAlreadyBanned: AugmentedError<ApiType>;
+      /**
        * Asset is already registered.
        **/
       AssetAlreadyRegistered: AugmentedError<ApiType>;
+      /**
+       * Asset is not banned.
+       **/
+      AssetNotBanned: AugmentedError<ApiType>;
       /**
        * Invalid asset name or symbol.
        **/
@@ -25,15 +33,31 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       AssetNotRegistered: AugmentedError<ApiType>;
       /**
-       * Cannot update asset location
+       * Cannot update asset location.
        **/
       CannotUpdateLocation: AugmentedError<ApiType>;
+      /**
+       * Origin is forbidden to set/update value.
+       **/
+      Forbidden: AugmentedError<ApiType>;
+      /**
+       * Sufficient assets can't be changed to insufficient.
+       **/
+      ForbiddenSufficiencyChange: AugmentedError<ApiType>;
+      /**
+       * Balance too low.
+       **/
+      InsufficientBalance: AugmentedError<ApiType>;
       /**
        * Incorrect number of assets provided to create shared asset.
        **/
       InvalidSharedAssetLen: AugmentedError<ApiType>;
       /**
-       * Location already registered with different asset
+       * Asset's symbol can't contain whitespace characters .
+       **/
+      InvalidSymbol: AugmentedError<ApiType>;
+      /**
+       * Location already registered with different asset.
        **/
       LocationAlreadyRegistered: AugmentedError<ApiType>;
       /**
@@ -45,9 +69,9 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NotInReservedRange: AugmentedError<ApiType>;
       /**
-       * Invalid asset name or symbol.
+       * Length of name or symbol is less than min. length.
        **/
-      TooLong: AugmentedError<ApiType>;
+      TooShort: AugmentedError<ApiType>;
       /**
        * Generic error
        **/
@@ -55,35 +79,43 @@ declare module '@polkadot/api-base/types/errors' {
     };
     balances: {
       /**
-       * Beneficiary account must pre-exist
+       * Beneficiary account must pre-exist.
        **/
       DeadAccount: AugmentedError<ApiType>;
       /**
-       * Value too low to create account due to existential deposit
+       * Value too low to create account due to existential deposit.
        **/
       ExistentialDeposit: AugmentedError<ApiType>;
       /**
-       * A vesting schedule already exists for this account
+       * A vesting schedule already exists for this account.
        **/
       ExistingVestingSchedule: AugmentedError<ApiType>;
+      /**
+       * Transfer/payment would kill account.
+       **/
+      Expendability: AugmentedError<ApiType>;
       /**
        * Balance too low to send value.
        **/
       InsufficientBalance: AugmentedError<ApiType>;
       /**
-       * Transfer/payment would kill account
-       **/
-      KeepAlive: AugmentedError<ApiType>;
-      /**
-       * Account liquidity restrictions prevent withdrawal
+       * Account liquidity restrictions prevent withdrawal.
        **/
       LiquidityRestrictions: AugmentedError<ApiType>;
       /**
-       * Number of named reserves exceed MaxReserves
+       * Number of freezes exceed `MaxFreezes`.
+       **/
+      TooManyFreezes: AugmentedError<ApiType>;
+      /**
+       * Number of holds exceed `MaxHolds`.
+       **/
+      TooManyHolds: AugmentedError<ApiType>;
+      /**
+       * Number of named reserves exceed `MaxReserves`.
        **/
       TooManyReserves: AugmentedError<ApiType>;
       /**
-       * Vesting balance too high to send value
+       * Vesting balance too high to send value.
        **/
       VestingBalance: AugmentedError<ApiType>;
       /**
@@ -93,9 +125,21 @@ declare module '@polkadot/api-base/types/errors' {
     };
     bonds: {
       /**
+       * Asset is not registered in `AssetRegistry`
+       **/
+      AssetNotFound: AugmentedError<ApiType>;
+      /**
        * Asset type not allowed for underlying asset
        **/
       DisallowedAsset: AugmentedError<ApiType>;
+      /**
+       * Bond's name parsing was now successful
+       **/
+      FailToParseName: AugmentedError<ApiType>;
+      /**
+       * Generated name is not valid.
+       **/
+      InvalidBondName: AugmentedError<ApiType>;
       /**
        * Maturity not long enough
        **/
@@ -169,43 +213,39 @@ declare module '@polkadot/api-base/types/errors' {
     };
     collatorSelection: {
       /**
-       * User is already a candidate
+       * Account is already a candidate.
        **/
       AlreadyCandidate: AugmentedError<ApiType>;
       /**
-       * User is already an Invulnerable
+       * Account is already an Invulnerable.
        **/
       AlreadyInvulnerable: AugmentedError<ApiType>;
       /**
-       * Account has no associated validator ID
+       * Account has no associated validator ID.
        **/
       NoAssociatedValidatorId: AugmentedError<ApiType>;
       /**
-       * User is not a candidate
+       * Account is not a candidate.
        **/
       NotCandidate: AugmentedError<ApiType>;
       /**
-       * Permission issue
+       * Account is not an Invulnerable.
        **/
-      Permission: AugmentedError<ApiType>;
+      NotInvulnerable: AugmentedError<ApiType>;
       /**
-       * Too few candidates
+       * Leaving would result in too few candidates.
        **/
-      TooFewCandidates: AugmentedError<ApiType>;
+      TooFewEligibleCollators: AugmentedError<ApiType>;
       /**
-       * Too many candidates
+       * The pallet has too many candidates.
        **/
       TooManyCandidates: AugmentedError<ApiType>;
       /**
-       * Too many invulnerables
+       * There are too many Invulnerables.
        **/
       TooManyInvulnerables: AugmentedError<ApiType>;
       /**
-       * Unknown error
-       **/
-      Unknown: AugmentedError<ApiType>;
-      /**
-       * Validator ID is not yet registered
+       * Validator ID is not yet registered.
        **/
       ValidatorNotRegistered: AugmentedError<ApiType>;
       /**
@@ -230,6 +270,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Account is not a member
        **/
       NotMember: AugmentedError<ApiType>;
+      /**
+       * Prime account is not a member
+       **/
+      PrimeAccountNotMember: AugmentedError<ApiType>;
       /**
        * Proposal must exist
        **/
@@ -329,10 +373,6 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       PriceUnstable: AugmentedError<ApiType>;
       /**
-       * The route to execute the trade on is not specified
-       **/
-      RouteNotSpecified: AugmentedError<ApiType>;
-      /**
        * Schedule not exist
        **/
       ScheduleNotFound: AugmentedError<ApiType>;
@@ -414,6 +454,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The given account did not vote on the referendum.
        **/
       NotVoter: AugmentedError<ApiType>;
+      /**
+       * The preimage does not exist.
+       **/
+      PreimageNotExist: AugmentedError<ApiType>;
       /**
        * Proposal still blacklisted
        **/
@@ -579,6 +623,92 @@ declare module '@polkadot/api-base/types/errors' {
     emaOracle: {
       OnTradeValueZero: AugmentedError<ApiType>;
       TooManyUniqueEntries: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
+    ethereum: {
+      /**
+       * Signature is invalid.
+       **/
+      InvalidSignature: AugmentedError<ApiType>;
+      /**
+       * Pre-log is present, therefore transact is not allowed.
+       **/
+      PreLogExists: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
+    evm: {
+      /**
+       * Not enough balance to perform action
+       **/
+      BalanceLow: AugmentedError<ApiType>;
+      /**
+       * Calculating total fee overflowed
+       **/
+      FeeOverflow: AugmentedError<ApiType>;
+      /**
+       * Gas limit is too high.
+       **/
+      GasLimitTooHigh: AugmentedError<ApiType>;
+      /**
+       * Gas limit is too low.
+       **/
+      GasLimitTooLow: AugmentedError<ApiType>;
+      /**
+       * Gas price is too low.
+       **/
+      GasPriceTooLow: AugmentedError<ApiType>;
+      /**
+       * Nonce is invalid
+       **/
+      InvalidNonce: AugmentedError<ApiType>;
+      /**
+       * Calculating total payment overflowed
+       **/
+      PaymentOverflow: AugmentedError<ApiType>;
+      /**
+       * EVM reentrancy
+       **/
+      Reentrancy: AugmentedError<ApiType>;
+      /**
+       * EIP-3607,
+       **/
+      TransactionMustComeFromEOA: AugmentedError<ApiType>;
+      /**
+       * Undefined error.
+       **/
+      Undefined: AugmentedError<ApiType>;
+      /**
+       * Withdraw fee failed
+       **/
+      WithdrawFailed: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
+    evmAccounts: {
+      /**
+       * Address is already bound
+       **/
+      AddressAlreadyBound: AugmentedError<ApiType>;
+      /**
+       * Address not whitelisted
+       **/
+      AddressNotWhitelisted: AugmentedError<ApiType>;
+      /**
+       * Bound address cannot be used
+       **/
+      BoundAddressCannotBeUsed: AugmentedError<ApiType>;
+      /**
+       * EVM Account's nonce is not zero
+       **/
+      TruncatedAccountAlreadyUsed: AugmentedError<ApiType>;
       /**
        * Generic error
        **/
@@ -866,6 +996,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       AssetNotFound: AugmentedError<ApiType>;
       /**
+       * Token cannot be removed from Omnipool because asset is not frozen.
+       **/
+      AssetNotFrozen: AugmentedError<ApiType>;
+      /**
        * Asset is not registered in asset registry
        **/
       AssetNotRegistered: AugmentedError<ApiType>;
@@ -878,7 +1012,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       AssetWeightCapExceeded: AugmentedError<ApiType>;
       /**
-       * Minimum limit has not been reached during trade.
+       * Slippage protection - minimum limit has not been reached.
        **/
       BuyLimitNotReached: AugmentedError<ApiType>;
       /**
@@ -910,11 +1044,11 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InsufficientTradingAmount: AugmentedError<ApiType>;
       /**
-       * HJb Asset's trabable is only allowed to be SELL or BUY.
+       * Hub asset is only allowed to be sold.
        **/
       InvalidHubAssetTradableState: AugmentedError<ApiType>;
       /**
-       * Invalid initial asset price. Price must be non-zero.
+       * Invalid initial asset price.
        **/
       InvalidInitialAssetPrice: AugmentedError<ApiType>;
       /**
@@ -930,27 +1064,19 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidWithdrawalFee: AugmentedError<ApiType>;
       /**
-       * Max fraction of asset reserve to sell has been exceeded.
+       * Max fraction of asset to sell has been exceeded.
        **/
       MaxInRatioExceeded: AugmentedError<ApiType>;
       /**
-       * Max fraction of asset reserve to buy has been exceeded.
+       * Max fraction of asset to buy has been exceeded.
        **/
       MaxOutRatioExceeded: AugmentedError<ApiType>;
       /**
-       * Adding token as protocol ( root ), token balance has not been updated prior to add token.
+       * Failed to add token to Omnipool due to insufficient initial liquidity.
        **/
       MissingBalance: AugmentedError<ApiType>;
       /**
-       * No native asset in the pool yet.
-       **/
-      NoNativeAssetInPool: AugmentedError<ApiType>;
-      /**
-       * No stable asset in the pool
-       **/
-      NoStableAssetInPool: AugmentedError<ApiType>;
-      /**
-       * Asset is not allowed to be bought or sold
+       * Asset is not allowed to be traded.
        **/
       NotAllowed: AugmentedError<ApiType>;
       /**
@@ -970,13 +1096,17 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       SameAssetTradeNotAllowed: AugmentedError<ApiType>;
       /**
-       * Maximum limit has been exceeded during trade.
+       * Slippage protection - maximum limit has been exceeded.
        **/
       SellLimitExceeded: AugmentedError<ApiType>;
       /**
-       * TVL cap has been exceeded
+       * Token cannot be removed from Omnipool due to shares still owned by other users.
        **/
-      TVLCapExceeded: AugmentedError<ApiType>;
+      SharesRemaining: AugmentedError<ApiType>;
+      /**
+       * Calculated amount out from sell trade is zero.
+       **/
+      ZeroAmountOut: AugmentedError<ApiType>;
       /**
        * Generic error
        **/
@@ -1200,7 +1330,7 @@ declare module '@polkadot/api-base/types/errors' {
     };
     parachainSystem: {
       /**
-       * The inherent which supplies the host configuration did not run this block
+       * The inherent which supplies the host configuration did not run this block.
        **/
       HostConfigurationNotAvailable: AugmentedError<ApiType>;
       /**
@@ -1212,16 +1342,16 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NotScheduled: AugmentedError<ApiType>;
       /**
-       * Attempt to upgrade validation function while existing upgrade pending
+       * Attempt to upgrade validation function while existing upgrade pending.
        **/
       OverlappingUpgrades: AugmentedError<ApiType>;
       /**
-       * Polkadot currently prohibits this parachain from upgrading its validation function
+       * Polkadot currently prohibits this parachain from upgrading its validation function.
        **/
       ProhibitedByPolkadot: AugmentedError<ApiType>;
       /**
        * The supplied validation function has compiled into a blob larger than Polkadot is
-       * willing to run
+       * willing to run.
        **/
       TooBig: AugmentedError<ApiType>;
       /**
@@ -1229,7 +1359,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       Unauthorized: AugmentedError<ApiType>;
       /**
-       * The inherent which supplies the validation data did not run this block
+       * The inherent which supplies the validation data did not run this block.
        **/
       ValidationDataNotAvailable: AugmentedError<ApiType>;
       /**
@@ -1276,7 +1406,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       Filtered: AugmentedError<ApiType>;
       /**
-       * The unlock operation cannot succeed because there are still users of the lock.
+       * The unlock operation cannot succeed because there are still consumers of the lock.
        **/
       InUse: AugmentedError<ApiType>;
       /**
@@ -1300,8 +1430,8 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NoSubscription: AugmentedError<ApiType>;
       /**
-       * There was some other issue (i.e. not to do with routing) in sending the message. Perhaps
-       * a lack of space for buffering the message.
+       * There was some other issue (i.e. not to do with routing) in sending the message.
+       * Perhaps a lack of space for buffering the message.
        **/
       SendFailure: AugmentedError<ApiType>;
       /**
@@ -1394,6 +1524,68 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
+    referrals: {
+      /**
+       * Referral code already exists.
+       **/
+      AlreadyExists: AugmentedError<ApiType>;
+      /**
+       * Account is already linked to another referral account.
+       **/
+      AlreadyLinked: AugmentedError<ApiType>;
+      /**
+       * The account has already a code registered.
+       **/
+      AlreadyRegistered: AugmentedError<ApiType>;
+      /**
+       * Minimum trading amount for conversion has not been reached.
+       **/
+      ConversionMinTradingAmountNotReached: AugmentedError<ApiType>;
+      /**
+       * Zero amount received from conversion.
+       **/
+      ConversionZeroAmountReceived: AugmentedError<ApiType>;
+      /**
+       * Calculated rewards are more than the fee amount. This can happen if percentages are incorrectly set.
+       **/
+      IncorrectRewardCalculation: AugmentedError<ApiType>;
+      /**
+       * Given referrer and trader percentages exceeds 100% percent.
+       **/
+      IncorrectRewardPercentage: AugmentedError<ApiType>;
+      /**
+       * Referral code contains invalid character. Only alphanumeric characters are allowed.
+       **/
+      InvalidCharacter: AugmentedError<ApiType>;
+      /**
+       * Provided referral code is invalid. Either does not exist or is too long.
+       **/
+      InvalidCode: AugmentedError<ApiType>;
+      /**
+       * Linking an account to the same referral account is not allowed.
+       **/
+      LinkNotAllowed: AugmentedError<ApiType>;
+      /**
+       * Price for given asset pair not found.
+       **/
+      PriceNotFound: AugmentedError<ApiType>;
+      /**
+       * Referral code is too long.
+       **/
+      TooLong: AugmentedError<ApiType>;
+      /**
+       * Referral code is too short.
+       **/
+      TooShort: AugmentedError<ApiType>;
+      /**
+       * Nothing in the referral pot account for the asset.
+       **/
+      ZeroAmount: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
     relayChainInfo: {
       /**
        * Generic error
@@ -1402,9 +1594,17 @@ declare module '@polkadot/api-base/types/errors' {
     };
     router: {
       /**
+       * Insufficient asset is not supported for on chain routing
+       **/
+      InsufficientAssetNotSupported: AugmentedError<ApiType>;
+      /**
        * The user has not enough balance to execute the trade
        **/
       InsufficientBalance: AugmentedError<ApiType>;
+      /**
+       * The route is invalid
+       **/
+      InvalidRoute: AugmentedError<ApiType>;
       /**
        * The route execution failed in the underlying AMM
        **/
@@ -1414,6 +1614,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       MaxTradesExceeded: AugmentedError<ApiType>;
       /**
+       * Trading same assets is not allowed.
+       **/
+      NotAllowed: AugmentedError<ApiType>;
+      /**
        * The AMM pool is not supported for executing trades
        **/
       PoolNotSupported: AugmentedError<ApiType>;
@@ -1422,9 +1626,9 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       RouteCalculationFailed: AugmentedError<ApiType>;
       /**
-       * Route has not trades to be executed
+       * The route update was not successful
        **/
-      RouteHasNoTrades: AugmentedError<ApiType>;
+      RouteUpdateIsNotSuccessful: AugmentedError<ApiType>;
       /**
        * The trading limit has been reached
        **/
@@ -1488,10 +1692,6 @@ declare module '@polkadot/api-base/types/errors' {
     };
     stableswap: {
       /**
-       * Asset is already in the pool.
-       **/
-      AssetInPool: AugmentedError<ApiType>;
-      /**
        * Asset is not in the pool.
        **/
       AssetNotInPool: AugmentedError<ApiType>;
@@ -1499,10 +1699,6 @@ declare module '@polkadot/api-base/types/errors' {
        * One or more assets are not registered in AssetRegistry
        **/
       AssetNotRegistered: AugmentedError<ApiType>;
-      /**
-       * Account balance is too low.
-       **/
-      BalanceTooLow: AugmentedError<ApiType>;
       /**
        * Minimum limit has not been reached during trade.
        **/
@@ -1552,10 +1748,6 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       MaxAssetsExceeded: AugmentedError<ApiType>;
       /**
-       * Desired amount not reached.
-       **/
-      MinimumAmountNotReached: AugmentedError<ApiType>;
-      /**
        * Not allowed to perform an operation on given asset.
        **/
       NotAllowed: AugmentedError<ApiType>;
@@ -1588,7 +1780,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       ShareAssetNotRegistered: AugmentedError<ApiType>;
       /**
-       * Slippage
+       * Slippage protection.
        **/
       SlippageLimit: AugmentedError<ApiType>;
       /**
@@ -1647,6 +1839,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       PositionNotFound: AugmentedError<ApiType>;
       /**
+       * Remove vote is not allowed when referendum is finished and staking position exists.
+       **/
+      RemoveVoteNotAllowed: AugmentedError<ApiType>;
+      /**
        * Generic error
        **/
       [key: string]: AugmentedError<ApiType>;
@@ -1702,6 +1898,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Account is not a member
        **/
       NotMember: AugmentedError<ApiType>;
+      /**
+       * Prime account is not a member
+       **/
+      PrimeAccountNotMember: AugmentedError<ApiType>;
       /**
        * Proposal must exist
        **/
@@ -1995,9 +2195,19 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       FailedToSend: AugmentedError<ApiType>;
       /**
+       * Indicated message is not present.
+       **/
+      MessageNotFound: AugmentedError<ApiType>;
+      /**
        * Provided weight is possibly not enough to execute the message.
        **/
       WeightOverLimit: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
+    xcmRateLimiter: {
       /**
        * Generic error
        **/
@@ -2083,6 +2293,114 @@ declare module '@polkadot/api-base/types/errors' {
        * The fee is zero.
        **/
       ZeroFee: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
+    xyk: {
+      /**
+       * Overflow
+       **/
+      AddAssetAmountInvalid: AugmentedError<ApiType>;
+      /**
+       * Asset amount has exceeded given limit.
+       **/
+      AssetAmountExceededLimit: AugmentedError<ApiType>;
+      /**
+       * Asset amount has not reached given limit.
+       **/
+      AssetAmountNotReachedLimit: AugmentedError<ApiType>;
+      /**
+       * Overflow
+       **/
+      BuyAssetAmountInvalid: AugmentedError<ApiType>;
+      /**
+       * Overflow
+       **/
+      CannotApplyDiscount: AugmentedError<ApiType>;
+      /**
+       * Pool cannot be created due to outside factors.
+       **/
+      CannotCreatePool: AugmentedError<ApiType>;
+      /**
+       * It is not allowed to create a pool between same assets.
+       **/
+      CannotCreatePoolWithSameAssets: AugmentedError<ApiType>;
+      /**
+       * Overflow
+       * Not used, kept for backward compatibility
+       **/
+      CreatePoolAssetAmountInvalid: AugmentedError<ApiType>;
+      /**
+       * Overflow
+       **/
+      FeeAmountInvalid: AugmentedError<ApiType>;
+      /**
+       * Asset balance is not sufficient.
+       **/
+      InsufficientAssetBalance: AugmentedError<ApiType>;
+      /**
+       * Liquidity has not reached the required minimum.
+       **/
+      InsufficientLiquidity: AugmentedError<ApiType>;
+      /**
+       * Not enough core asset liquidity in the pool.
+       **/
+      InsufficientNativeCurrencyBalance: AugmentedError<ApiType>;
+      /**
+       * Not enough asset liquidity in the pool.
+       **/
+      InsufficientPoolAssetBalance: AugmentedError<ApiType>;
+      /**
+       * Amount is less than min trading limit.
+       **/
+      InsufficientTradingAmount: AugmentedError<ApiType>;
+      /**
+       * Overflow
+       **/
+      InvalidLiquidityAmount: AugmentedError<ApiType>;
+      /**
+       * Overflow
+       **/
+      InvalidMintedLiquidity: AugmentedError<ApiType>;
+      /**
+       * Max fraction of pool to sell in single transaction has been exceeded.
+       **/
+      MaxInRatioExceeded: AugmentedError<ApiType>;
+      /**
+       * Max fraction of pool to buy in single transaction has been exceeded.
+       **/
+      MaxOutRatioExceeded: AugmentedError<ApiType>;
+      /**
+       * Overflow
+       **/
+      Overflow: AugmentedError<ApiType>;
+      /**
+       * Overflow
+       **/
+      RemoveAssetAmountInvalid: AugmentedError<ApiType>;
+      /**
+       * Overflow
+       **/
+      SellAssetAmountInvalid: AugmentedError<ApiType>;
+      /**
+       * Liquidity pool for given assets already exists.
+       **/
+      TokenPoolAlreadyExists: AugmentedError<ApiType>;
+      /**
+       * Liquidity pool for given assets does not exist.
+       **/
+      TokenPoolNotFound: AugmentedError<ApiType>;
+      /**
+       * It is not allowed to create a pool with zero initial price.
+       * Not used, kept for backward compatibility
+       **/
+      ZeroInitialPrice: AugmentedError<ApiType>;
+      /**
+       * Liquidity is zero.
+       **/
+      ZeroLiquidity: AugmentedError<ApiType>;
       /**
        * Generic error
        **/
