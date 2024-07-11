@@ -7285,7 +7285,19 @@ export default {
    **/
   PalletClaimsValidateClaim: 'Null',
   /**
-   * Lookup775: hydradx_runtime::Runtime
+   * Lookup774: frame_metadata_hash_extension::CheckMetadataHash<T>
+   **/
+  FrameMetadataHashExtensionCheckMetadataHash: {
+    mode: 'FrameMetadataHashExtensionMode'
+  },
+  /**
+   * Lookup775: frame_metadata_hash_extension::Mode
+   **/
+  FrameMetadataHashExtensionMode: {
+    _enum: ['Disabled', 'Enabled']
+  },
+  /**
+   * Lookup777: hydradx_runtime::Runtime
    **/
   HydradxRuntimeRuntime: 'Null'
 };

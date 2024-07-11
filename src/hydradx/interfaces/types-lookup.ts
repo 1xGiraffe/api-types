@@ -8040,7 +8040,19 @@ declare module '@polkadot/types/lookup' {
   /** @name PalletClaimsValidateClaim (773) */
   type PalletClaimsValidateClaim = Null;
 
-  /** @name HydradxRuntimeRuntime (775) */
+  /** @name FrameMetadataHashExtensionCheckMetadataHash (774) */
+  interface FrameMetadataHashExtensionCheckMetadataHash extends Struct {
+    readonly mode: FrameMetadataHashExtensionMode;
+  }
+
+  /** @name FrameMetadataHashExtensionMode (775) */
+  interface FrameMetadataHashExtensionMode extends Enum {
+    readonly isDisabled: boolean;
+    readonly isEnabled: boolean;
+    readonly type: 'Disabled' | 'Enabled';
+  }
+
+  /** @name HydradxRuntimeRuntime (777) */
   type HydradxRuntimeRuntime = Null;
 
 } // declare module
