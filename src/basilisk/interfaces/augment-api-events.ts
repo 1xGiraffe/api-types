@@ -204,42 +204,6 @@ declare module '@polkadot/api-base/types/events' {
        **/
       [key: string]: AugmentedEvent<ApiType>;
     };
-    council: {
-      /**
-       * A motion was approved by the required threshold.
-       **/
-      Approved: AugmentedEvent<ApiType, [proposalHash: H256], { proposalHash: H256 }>;
-      /**
-       * A proposal was closed because its threshold was reached or after its duration was up.
-       **/
-      Closed: AugmentedEvent<ApiType, [proposalHash: H256, yes: u32, no: u32], { proposalHash: H256, yes: u32, no: u32 }>;
-      /**
-       * A motion was not approved by the required threshold.
-       **/
-      Disapproved: AugmentedEvent<ApiType, [proposalHash: H256], { proposalHash: H256 }>;
-      /**
-       * A motion was executed; result will be `Ok` if it returned without error.
-       **/
-      Executed: AugmentedEvent<ApiType, [proposalHash: H256, result: Result<Null, SpRuntimeDispatchError>], { proposalHash: H256, result: Result<Null, SpRuntimeDispatchError> }>;
-      /**
-       * A single member did some action; result will be `Ok` if it returned without error.
-       **/
-      MemberExecuted: AugmentedEvent<ApiType, [proposalHash: H256, result: Result<Null, SpRuntimeDispatchError>], { proposalHash: H256, result: Result<Null, SpRuntimeDispatchError> }>;
-      /**
-       * A motion (given hash) has been proposed (by given account) with a threshold (given
-       * `MemberCount`).
-       **/
-      Proposed: AugmentedEvent<ApiType, [account: AccountId32, proposalIndex: u32, proposalHash: H256, threshold: u32], { account: AccountId32, proposalIndex: u32, proposalHash: H256, threshold: u32 }>;
-      /**
-       * A motion (given hash) has been voted on by given account, leaving
-       * a tally (yes votes and no votes given respectively as `MemberCount`).
-       **/
-      Voted: AugmentedEvent<ApiType, [account: AccountId32, proposalHash: H256, voted: bool, yes: u32, no: u32], { account: AccountId32, proposalHash: H256, voted: bool, yes: u32, no: u32 }>;
-      /**
-       * Generic event
-       **/
-      [key: string]: AugmentedEvent<ApiType>;
-    };
     cumulusXcm: {
       /**
        * Downward message executed with the given outcome.
@@ -329,7 +293,7 @@ declare module '@polkadot/api-base/types/events' {
        **/
       Proposed: AugmentedEvent<ApiType, [proposalIndex: u32, deposit: u128], { proposalIndex: u32, deposit: u128 }>;
       /**
-       * An account has secconded a proposal
+       * An account has seconded a proposal
        **/
       Seconded: AugmentedEvent<ApiType, [seconder: AccountId32, propIndex: u32], { seconder: AccountId32, propIndex: u32 }>;
       /**
@@ -370,49 +334,6 @@ declare module '@polkadot/api-base/types/events' {
        * Account removed from non-dustable list.
        **/
       Removed: AugmentedEvent<ApiType, [who: AccountId32], { who: AccountId32 }>;
-      /**
-       * Generic event
-       **/
-      [key: string]: AugmentedEvent<ApiType>;
-    };
-    elections: {
-      /**
-       * A candidate was slashed by amount due to failing to obtain a seat as member or
-       * runner-up.
-       * 
-       * Note that old members and runners-up are also candidates.
-       **/
-      CandidateSlashed: AugmentedEvent<ApiType, [candidate: AccountId32, amount: u128], { candidate: AccountId32, amount: u128 }>;
-      /**
-       * Internal error happened while trying to perform election.
-       **/
-      ElectionError: AugmentedEvent<ApiType, []>;
-      /**
-       * No (or not enough) candidates existed for this round. This is different from
-       * `NewTerm(\[\])`. See the description of `NewTerm`.
-       **/
-      EmptyTerm: AugmentedEvent<ApiType, []>;
-      /**
-       * A member has been removed. This should always be followed by either `NewTerm` or
-       * `EmptyTerm`.
-       **/
-      MemberKicked: AugmentedEvent<ApiType, [member: AccountId32], { member: AccountId32 }>;
-      /**
-       * A new term with new_members. This indicates that enough candidates existed to run
-       * the election, not that enough have has been elected. The inner value must be examined
-       * for this purpose. A `NewTerm(\[\])` indicates that some candidates got their bond
-       * slashed and none were elected, whilst `EmptyTerm` means that no candidates existed to
-       * begin with.
-       **/
-      NewTerm: AugmentedEvent<ApiType, [newMembers: Vec<ITuple<[AccountId32, u128]>>], { newMembers: Vec<ITuple<[AccountId32, u128]>> }>;
-      /**
-       * Someone has renounced their candidacy.
-       **/
-      Renounced: AugmentedEvent<ApiType, [candidate: AccountId32], { candidate: AccountId32 }>;
-      /**
-       * A seat holder was slashed by amount by being forcefully removed from the set.
-       **/
-      SeatHolderSlashed: AugmentedEvent<ApiType, [seatHolder: AccountId32, amount: u128], { seatHolder: AccountId32, amount: u128 }>;
       /**
        * Generic event
        **/
@@ -998,6 +919,19 @@ declare module '@polkadot/api-base/types/events' {
        **/
       PermanentlyOverweight: AugmentedEvent<ApiType, [task: ITuple<[u32, u32]>, id: Option<U8aFixed>], { task: ITuple<[u32, u32]>, id: Option<U8aFixed> }>;
       /**
+       * Cancel a retry configuration for some task.
+       **/
+      RetryCancelled: AugmentedEvent<ApiType, [task: ITuple<[u32, u32]>, id: Option<U8aFixed>], { task: ITuple<[u32, u32]>, id: Option<U8aFixed> }>;
+      /**
+       * The given task was unable to be retried since the agenda is full at that block or there
+       * was not enough weight to reschedule it.
+       **/
+      RetryFailed: AugmentedEvent<ApiType, [task: ITuple<[u32, u32]>, id: Option<U8aFixed>], { task: ITuple<[u32, u32]>, id: Option<U8aFixed> }>;
+      /**
+       * Set a retry configuration for some task.
+       **/
+      RetrySet: AugmentedEvent<ApiType, [task: ITuple<[u32, u32]>, id: Option<U8aFixed>, period: u32, retries: u8], { task: ITuple<[u32, u32]>, id: Option<U8aFixed>, period: u32, retries: u8 }>;
+      /**
        * Scheduled some task.
        **/
       Scheduled: AugmentedEvent<ApiType, [when: u32, index: u32], { when: u32, index: u32 }>;
@@ -1105,32 +1039,6 @@ declare module '@polkadot/api-base/types/events' {
        * a tally (yes votes and no votes given respectively as `MemberCount`).
        **/
       Voted: AugmentedEvent<ApiType, [account: AccountId32, proposalHash: H256, voted: bool, yes: u32, no: u32], { account: AccountId32, proposalHash: H256, voted: bool, yes: u32, no: u32 }>;
-      /**
-       * Generic event
-       **/
-      [key: string]: AugmentedEvent<ApiType>;
-    };
-    tips: {
-      /**
-       * A new tip suggestion has been opened.
-       **/
-      NewTip: AugmentedEvent<ApiType, [tipHash: H256], { tipHash: H256 }>;
-      /**
-       * A tip suggestion has been closed.
-       **/
-      TipClosed: AugmentedEvent<ApiType, [tipHash: H256, who: AccountId32, payout: u128], { tipHash: H256, who: AccountId32, payout: u128 }>;
-      /**
-       * A tip suggestion has reached threshold and is closing.
-       **/
-      TipClosing: AugmentedEvent<ApiType, [tipHash: H256], { tipHash: H256 }>;
-      /**
-       * A tip suggestion has been retracted.
-       **/
-      TipRetracted: AugmentedEvent<ApiType, [tipHash: H256], { tipHash: H256 }>;
-      /**
-       * A tip suggestion has been slashed.
-       **/
-      TipSlashed: AugmentedEvent<ApiType, [tipHash: H256, finder: AccountId32, deposit: u128], { tipHash: H256, finder: AccountId32, deposit: u128 }>;
       /**
        * Generic event
        **/

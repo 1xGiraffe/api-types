@@ -556,6 +556,14 @@ declare module '@polkadot/api-base/types/events' {
        **/
       Bound: AugmentedEvent<ApiType, [account: AccountId32, address: H160], { account: AccountId32, address: H160 }>;
       /**
+       * Contract was approved.
+       **/
+      ContractApproved: AugmentedEvent<ApiType, [address: H160], { address: H160 }>;
+      /**
+       * Contract was disapproved.
+       **/
+      ContractDisapproved: AugmentedEvent<ApiType, [address: H160], { address: H160 }>;
+      /**
        * Deployer was added.
        **/
       DeployerAdded: AugmentedEvent<ApiType, [who: H160], { who: H160 }>;
@@ -816,6 +824,10 @@ declare module '@polkadot/api-base/types/events' {
        **/
       GlobalFarmTerminated: AugmentedEvent<ApiType, [globalFarmId: u32, who: AccountId32, rewardCurrency: u32, undistributedRewards: u128], { globalFarmId: u32, who: AccountId32, rewardCurrency: u32, undistributedRewards: u128 }>;
       /**
+       * Global farm was updated
+       **/
+      GlobalFarmUpdated: AugmentedEvent<ApiType, [id: u32, plannedYieldingPeriods: u32, yieldPerPeriod: Perquintill, minDeposit: u128], { id: u32, plannedYieldingPeriods: u32, yieldPerPeriod: Perquintill, minDeposit: u128 }>;
+      /**
        * Rewards were claimed.
        **/
       RewardClaimed: AugmentedEvent<ApiType, [globalFarmId: u32, yieldFarmId: u32, who: AccountId32, claimed: u128, rewardCurrency: u32, depositId: u128], { globalFarmId: u32, yieldFarmId: u32, who: AccountId32, claimed: u128, rewardCurrency: u32, depositId: u128 }>;
@@ -892,11 +904,11 @@ declare module '@polkadot/api-base/types/events' {
       /**
        * An Order has been completely filled
        **/
-      Filled: AugmentedEvent<ApiType, [orderId: u32, who: AccountId32, amountIn: u128, amountOut: u128], { orderId: u32, who: AccountId32, amountIn: u128, amountOut: u128 }>;
+      Filled: AugmentedEvent<ApiType, [orderId: u32, who: AccountId32, amountIn: u128, amountOut: u128, fee: u128], { orderId: u32, who: AccountId32, amountIn: u128, amountOut: u128, fee: u128 }>;
       /**
        * An Order has been partially filled
        **/
-      PartiallyFilled: AugmentedEvent<ApiType, [orderId: u32, who: AccountId32, amountIn: u128, amountOut: u128], { orderId: u32, who: AccountId32, amountIn: u128, amountOut: u128 }>;
+      PartiallyFilled: AugmentedEvent<ApiType, [orderId: u32, who: AccountId32, amountIn: u128, amountOut: u128, fee: u128], { orderId: u32, who: AccountId32, amountIn: u128, amountOut: u128, fee: u128 }>;
       /**
        * An Order has been placed
        **/
@@ -1202,6 +1214,19 @@ declare module '@polkadot/api-base/types/events' {
        **/
       PermanentlyOverweight: AugmentedEvent<ApiType, [task: ITuple<[u32, u32]>, id: Option<U8aFixed>], { task: ITuple<[u32, u32]>, id: Option<U8aFixed> }>;
       /**
+       * Cancel a retry configuration for some task.
+       **/
+      RetryCancelled: AugmentedEvent<ApiType, [task: ITuple<[u32, u32]>, id: Option<U8aFixed>], { task: ITuple<[u32, u32]>, id: Option<U8aFixed> }>;
+      /**
+       * The given task was unable to be retried since the agenda is full at that block or there
+       * was not enough weight to reschedule it.
+       **/
+      RetryFailed: AugmentedEvent<ApiType, [task: ITuple<[u32, u32]>, id: Option<U8aFixed>], { task: ITuple<[u32, u32]>, id: Option<U8aFixed> }>;
+      /**
+       * Set a retry configuration for some task.
+       **/
+      RetrySet: AugmentedEvent<ApiType, [task: ITuple<[u32, u32]>, id: Option<U8aFixed>, period: u32, retries: u8], { task: ITuple<[u32, u32]>, id: Option<U8aFixed>, period: u32, retries: u8 }>;
+      /**
        * Scheduled some task.
        **/
       Scheduled: AugmentedEvent<ApiType, [when: u32, index: u32], { when: u32, index: u32 }>;
@@ -1223,7 +1248,7 @@ declare module '@polkadot/api-base/types/events' {
     };
     stableswap: {
       /**
-       * AAmplification of a pool has been scheduled to change.
+       * Amplification of a pool has been scheduled to change.
        **/
       AmplificationChanging: AugmentedEvent<ApiType, [poolId: u32, currentAmplification: u16, finalAmplification: u16, startBlock: u32, endBlock: u32], { poolId: u32, currentAmplification: u16, finalAmplification: u16, startBlock: u32, endBlock: u32 }>;
       /**
@@ -1246,6 +1271,10 @@ declare module '@polkadot/api-base/types/events' {
        * A pool was created.
        **/
       PoolCreated: AugmentedEvent<ApiType, [poolId: u32, assets: Vec<u32>, amplification: u16, fee: Permill], { poolId: u32, assets: Vec<u32>, amplification: u16, fee: Permill }>;
+      /**
+       * A pool has been destroyed.
+       **/
+      PoolDestroyed: AugmentedEvent<ApiType, [poolId: u32], { poolId: u32 }>;
       /**
        * Sell trade executed. Trade fee paid in asset leaving the pool (already subtracted from amount_out).
        **/

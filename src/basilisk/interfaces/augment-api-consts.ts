@@ -8,8 +8,8 @@ import '@polkadot/api-base/types/consts';
 import type { ApiTypes, AugmentedConst } from '@polkadot/api-base/types';
 import type { Null, Option, U8aFixed, Vec, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { Codec, ITuple } from '@polkadot/types-codec/types';
-import type { Percent, Permill } from '@polkadot/types/interfaces/runtime';
-import type { FrameSupportPalletId, FrameSystemLimitsBlockLength, FrameSystemLimitsBlockWeights, PalletReferendaTrackInfo, SpVersionRuntimeVersion, SpWeightsRuntimeDbWeight, SpWeightsWeightV2Weight, StagingXcmV4Location } from '@polkadot/types/lookup';
+import type { AccountId32, Permill } from '@polkadot/types/interfaces/runtime';
+import type { FrameSupportPalletId, FrameSystemLimitsBlockLength, FrameSystemLimitsBlockWeights, HydradxTraitsOracleOraclePeriod, PalletReferendaTrackInfo, SpVersionRuntimeVersion, SpWeightsRuntimeDbWeight, SpWeightsWeightV2Weight, StagingXcmV4Location } from '@polkadot/types/lookup';
 
 export type __AugmentedConst<ApiType extends ApiTypes> = AugmentedConst<ApiType>;
 
@@ -21,6 +21,19 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       nativeAssetId: u32 & AugmentedConst<ApiType>;
       sequentialIdStartAt: u32 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    aura: {
+      /**
+       * The slot duration Aura should run with, expressed in milliseconds.
+       * The effective value of this type should not change while the chain is running.
+       * 
+       * For backwards compatibility either use [`MinimumPeriodTimesTwo`] or a const.
+       **/
+      slotDuration: u64 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -45,10 +58,14 @@ declare module '@polkadot/api-base/types/consts' {
       /**
        * The maximum number of locks that should exist on an account.
        * Not strictly enforced, but used for weight estimation.
+       * 
+       * Use of locks is deprecated in favour of freezes. See `https://github.com/paritytech/substrate/pull/12951/`
        **/
       maxLocks: u32 & AugmentedConst<ApiType>;
       /**
        * The maximum number of named reserves that can exist on an account.
+       * 
+       * Use of reserves is deprecated in favour of holds. See `https://github.com/paritytech/substrate/pull/12951/`
        **/
       maxReserves: u32 & AugmentedConst<ApiType>;
       /**
@@ -85,16 +102,6 @@ declare module '@polkadot/api-base/types/consts' {
        * those successful voters are locked into the consequences that their votes entail.
        **/
       voteLockingPeriod: u32 & AugmentedConst<ApiType>;
-      /**
-       * Generic const
-       **/
-      [key: string]: Codec;
-    };
-    council: {
-      /**
-       * The maximum weight of a dispatch call that can be proposed and executed.
-       **/
-      maxProposalWeight: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -183,69 +190,9 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       reward: u128 & AugmentedConst<ApiType>;
       /**
-       * Generic const
+       * Default account for `reward_account` and `dust_account` in genesis config.
        **/
-      [key: string]: Codec;
-    };
-    elections: {
-      /**
-       * How much should be locked up in order to submit one's candidacy.
-       **/
-      candidacyBond: u128 & AugmentedConst<ApiType>;
-      /**
-       * Number of members to elect.
-       **/
-      desiredMembers: u32 & AugmentedConst<ApiType>;
-      /**
-       * Number of runners_up to keep.
-       **/
-      desiredRunnersUp: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum number of candidates in a phragmen election.
-       * 
-       * Warning: This impacts the size of the election which is run onchain. Chose wisely, and
-       * consider how it will impact `T::WeightInfo::election_phragmen`.
-       * 
-       * When this limit is reached no more candidates are accepted in the election.
-       **/
-      maxCandidates: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum number of voters to allow in a phragmen election.
-       * 
-       * Warning: This impacts the size of the election which is run onchain. Chose wisely, and
-       * consider how it will impact `T::WeightInfo::election_phragmen`.
-       * 
-       * When the limit is reached the new voters are ignored.
-       **/
-      maxVoters: u32 & AugmentedConst<ApiType>;
-      /**
-       * Maximum numbers of votes per voter.
-       * 
-       * Warning: This impacts the size of the election which is run onchain. Chose wisely, and
-       * consider how it will impact `T::WeightInfo::election_phragmen`.
-       **/
-      maxVotesPerVoter: u32 & AugmentedConst<ApiType>;
-      /**
-       * Identifier for the elections-phragmen pallet's lock
-       **/
-      palletId: U8aFixed & AugmentedConst<ApiType>;
-      /**
-       * How long each seat is kept. This defines the next block number at which an election
-       * round will happen. If set to zero, no elections are ever triggered and the module will
-       * be in passive mode.
-       **/
-      termDuration: u32 & AugmentedConst<ApiType>;
-      /**
-       * Base deposit associated with voting.
-       * 
-       * This should be sensibly high to economically ensure the pallet cannot be attacked by
-       * creating a gigantic number of votes.
-       **/
-      votingBondBase: u128 & AugmentedConst<ApiType>;
-      /**
-       * The amount of bond that need to be locked for each vote (32 bytes).
-       **/
-      votingBondFactor: u128 & AugmentedConst<ApiType>;
+      treasuryAccountId: AccountId32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -271,7 +218,7 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       byteDeposit: u128 & AugmentedConst<ApiType>;
       /**
-       * Maxmimum number of registrars allowed in the system. Needed to bound the complexity
+       * Maximum number of registrars allowed in the system. Needed to bound the complexity
        * of, e.g., updating judgements.
        **/
       maxRegistrars: u32 & AugmentedConst<ApiType>;
@@ -343,6 +290,14 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       heapSize: u32 & AugmentedConst<ApiType>;
       /**
+       * The maximum amount of weight (if any) to be used from remaining weight `on_idle` which
+       * should be provided to the message queue for servicing enqueued items `on_idle`.
+       * Useful for parachains to process messages at the same block they are received.
+       * 
+       * If `None`, it will not call `ServiceQueues::service_queues` in `on_idle`.
+       **/
+      idleMaxServiceWeight: Option<SpWeightsWeightV2Weight> & AugmentedConst<ApiType>;
+      /**
        * The maximum number of stale pages (i.e. of overweight messages) allowed before culling
        * can happen. Once there are more stale pages than this, then historical pages may be
        * dropped, even if they contain unprocessed overweight messages.
@@ -350,10 +305,11 @@ declare module '@polkadot/api-base/types/consts' {
       maxStale: u32 & AugmentedConst<ApiType>;
       /**
        * The amount of weight (if any) which should be provided to the message queue for
-       * servicing enqueued items.
+       * servicing enqueued items `on_initialize`.
        * 
        * This may be legitimately `None` in the case that you will call
-       * `ServiceQueues::service_queues` manually.
+       * `ServiceQueues::service_queues` manually or set [`Self::IdleMaxServiceWeight`] to have
+       * it run in `on_idle`.
        **/
       serviceWeight: Option<SpWeightsWeightV2Weight> & AugmentedConst<ApiType>;
       /**
@@ -405,6 +361,16 @@ declare module '@polkadot/api-base/types/consts' {
        * Collection IDs reserved for runtime up to the following constant
        **/
       reserveCollectionIdUpTo: u128 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    parachainSystem: {
+      /**
+       * Returns the parachain ID we are running with.
+       **/
+      selfParaId: u32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -488,6 +454,10 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       nativeAssetId: u32 & AugmentedConst<ApiType>;
       /**
+       * Oracle's price aggregation period.
+       **/
+      oraclePeriod: HydradxTraitsOracleOraclePeriod & AugmentedConst<ApiType>;
+      /**
        * Generic const
        **/
       [key: string]: Codec;
@@ -566,7 +536,7 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       ss58Prefix: u16 & AugmentedConst<ApiType>;
       /**
-       * Get the chain's current version.
+       * Get the chain's in-code version.
        **/
       version: SpVersionRuntimeVersion & AugmentedConst<ApiType>;
       /**
@@ -594,38 +564,6 @@ declare module '@polkadot/api-base/types/consts' {
        * period on default settings.
        **/
       minimumPeriod: u64 & AugmentedConst<ApiType>;
-      /**
-       * Generic const
-       **/
-      [key: string]: Codec;
-    };
-    tips: {
-      /**
-       * The amount held on deposit per byte within the tip report reason or bounty description.
-       **/
-      dataDepositPerByte: u128 & AugmentedConst<ApiType>;
-      /**
-       * Maximum acceptable reason length.
-       * 
-       * Benchmarks depend on this value, be sure to update weights file when changing this value
-       **/
-      maximumReasonLength: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum amount for a single tip.
-       **/
-      maxTipAmount: u128 & AugmentedConst<ApiType>;
-      /**
-       * The period for which a tip remains open after is has achieved threshold tippers.
-       **/
-      tipCountdown: u32 & AugmentedConst<ApiType>;
-      /**
-       * The percent of the final tip which goes to the original reporter of the tip.
-       **/
-      tipFindersFee: Percent & AugmentedConst<ApiType>;
-      /**
-       * The non-zero amount held on deposit for placing a tip report.
-       **/
-      tipReportDepositBase: u128 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -874,6 +812,10 @@ declare module '@polkadot/api-base/types/consts' {
        * Pallet id.
        **/
       palletId: FrameSupportPalletId & AugmentedConst<ApiType>;
+      /**
+       * Treasury account to receive claimed rewards lower than ED
+       **/
+      treasuryAccountId: AccountId32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/

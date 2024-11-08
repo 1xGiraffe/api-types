@@ -34,6 +34,19 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       [key: string]: Codec;
     };
+    aura: {
+      /**
+       * The slot duration Aura should run with, expressed in milliseconds.
+       * The effective value of this type should not change while the chain is running.
+       * 
+       * For backwards compatibility either use [`MinimumPeriodTimesTwo`] or a const.
+       **/
+      slotDuration: u64 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
     balances: {
       /**
        * The minimum amount required to keep an account open. MUST BE GREATER THAN ZERO!
@@ -53,10 +66,14 @@ declare module '@polkadot/api-base/types/consts' {
       /**
        * The maximum number of locks that should exist on an account.
        * Not strictly enforced, but used for weight estimation.
+       * 
+       * Use of locks is deprecated in favour of freezes. See `https://github.com/paritytech/substrate/pull/12951/`
        **/
       maxLocks: u32 & AugmentedConst<ApiType>;
       /**
        * The maximum number of named reserves that can exist on an account.
+       * 
+       * Use of reserves is deprecated in favour of holds. See `https://github.com/paritytech/substrate/pull/12951/`
        **/
       maxReserves: u32 & AugmentedConst<ApiType>;
       /**
@@ -138,9 +155,17 @@ declare module '@polkadot/api-base/types/consts' {
     };
     dca: {
       /**
+       * Chance of the random rescheduling
+       **/
+      bumpChance: Percent & AugmentedConst<ApiType>;
+      /**
        * The fee receiver for transaction fees
        **/
       feeReceiver: AccountId32 & AugmentedConst<ApiType>;
+      /**
+       * Max configurable price difference allowed between blocks
+       **/
+      maxConfigurablePriceDifferenceBetweenBlocks: Permill & AugmentedConst<ApiType>;
       /**
        * The number of max retries in case of trade limit error
        **/
@@ -158,6 +183,10 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       minBudgetInNativeCurrency: u128 & AugmentedConst<ApiType>;
       /**
+       * Minimal period between executions
+       **/
+      minimalPeriod: u32 & AugmentedConst<ApiType>;
+      /**
        * Minimum trading limit for a single trade
        **/
       minimumTradingLimit: u128 & AugmentedConst<ApiType>;
@@ -169,6 +198,10 @@ declare module '@polkadot/api-base/types/consts' {
        * Native Asset Id
        **/
       nativeAssetId: u32 & AugmentedConst<ApiType>;
+      /**
+       * Polkadot Native Asset Id (DOT)
+       **/
+      polkadotNativeAssetId: u32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -249,6 +282,10 @@ declare module '@polkadot/api-base/types/consts' {
        * Reward amount
        **/
       reward: u128 & AugmentedConst<ApiType>;
+      /**
+       * Default account for `reward_account` and `dust_account` in genesis config.
+       **/
+      treasuryAccountId: AccountId32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -366,7 +403,7 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       byteDeposit: u128 & AugmentedConst<ApiType>;
       /**
-       * Maxmimum number of registrars allowed in the system. Needed to bound the complexity
+       * Maximum number of registrars allowed in the system. Needed to bound the complexity
        * of, e.g., updating judgements.
        **/
       maxRegistrars: u32 & AugmentedConst<ApiType>;
@@ -430,6 +467,14 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       heapSize: u32 & AugmentedConst<ApiType>;
       /**
+       * The maximum amount of weight (if any) to be used from remaining weight `on_idle` which
+       * should be provided to the message queue for servicing enqueued items `on_idle`.
+       * Useful for parachains to process messages at the same block they are received.
+       * 
+       * If `None`, it will not call `ServiceQueues::service_queues` in `on_idle`.
+       **/
+      idleMaxServiceWeight: Option<SpWeightsWeightV2Weight> & AugmentedConst<ApiType>;
+      /**
        * The maximum number of stale pages (i.e. of overweight messages) allowed before culling
        * can happen. Once there are more stale pages than this, then historical pages may be
        * dropped, even if they contain unprocessed overweight messages.
@@ -437,10 +482,11 @@ declare module '@polkadot/api-base/types/consts' {
       maxStale: u32 & AugmentedConst<ApiType>;
       /**
        * The amount of weight (if any) which should be provided to the message queue for
-       * servicing enqueued items.
+       * servicing enqueued items `on_initialize`.
        * 
        * This may be legitimately `None` in the case that you will call
-       * `ServiceQueues::service_queues` manually.
+       * `ServiceQueues::service_queues` manually or set [`Self::IdleMaxServiceWeight`] to have
+       * it run in `on_idle`.
        **/
       serviceWeight: Option<SpWeightsWeightV2Weight> & AugmentedConst<ApiType>;
       /**
@@ -482,6 +528,10 @@ declare module '@polkadot/api-base/types/consts' {
        * Native Asset
        **/
       nativeAssetId: u32 & AugmentedConst<ApiType>;
+      /**
+       * Polkadot Native Asset (DOT)
+       **/
+      polkadotNativeAssetId: u32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -576,7 +626,18 @@ declare module '@polkadot/api-base/types/consts' {
       [key: string]: Codec;
     };
     otc: {
+      /**
+       * Multiplier used to compute minimal amounts of asset_in and asset_out in an OTC.
+       **/
       existentialDepositMultiplier: u8 & AugmentedConst<ApiType>;
+      /**
+       * Fee deducted from amount_out.
+       **/
+      fee: Permill & AugmentedConst<ApiType>;
+      /**
+       * Fee receiver.
+       **/
+      feeReceiver: AccountId32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -603,6 +664,16 @@ declare module '@polkadot/api-base/types/consts' {
        * Account who receives the profit.
        **/
       profitReceiver: AccountId32 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    parachainSystem: {
+      /**
+       * Returns the parachain ID we are running with.
+       **/
+      selfParaId: u32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -687,6 +758,10 @@ declare module '@polkadot/api-base/types/consts' {
        * Native Asset Id
        **/
       nativeAssetId: u32 & AugmentedConst<ApiType>;
+      /**
+       * Oracle's price aggregation period.
+       **/
+      oraclePeriod: HydradxTraitsOracleOraclePeriod & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -835,7 +910,7 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       ss58Prefix: u16 & AugmentedConst<ApiType>;
       /**
-       * Get the chain's current version.
+       * Get the chain's in-code version.
        **/
       version: SpVersionRuntimeVersion & AugmentedConst<ApiType>;
       /**

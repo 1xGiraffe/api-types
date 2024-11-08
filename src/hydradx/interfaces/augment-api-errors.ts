@@ -357,6 +357,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       DepositFailed: AugmentedError<ApiType>;
       /**
+       * Operation is not supported for this currency
+       **/
+      NotSupported: AugmentedError<ApiType>;
+      /**
        * Generic error
        **/
       [key: string]: AugmentedError<ApiType>;
@@ -367,9 +371,13 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       BlockNumberIsNotInFuture: AugmentedError<ApiType>;
       /**
-       * The budget is too low for executing one DCA
+       * The budget is too low for executing at least two orders
        **/
       BudgetTooLow: AugmentedError<ApiType>;
+      /**
+       * Order was randomly rescheduled to next block
+       **/
+      Bumped: AugmentedError<ApiType>;
       /**
        * Error occurred when calculating price
        **/
@@ -403,6 +411,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NoParentHashFound: AugmentedError<ApiType>;
       /**
+       * Period should be longer than 5 blocks
+       **/
+      PeriodTooShort: AugmentedError<ApiType>;
+      /**
        * Price is unstable as price change from oracle data is bigger than max allowed
        **/
       PriceUnstable: AugmentedError<ApiType>;
@@ -415,11 +427,15 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       SlippageLimitReached: AugmentedError<ApiType>;
       /**
+       * Stability threshold cannot be higher than `MaxConfigurablePriceDifferenceBetweenBlock`
+       **/
+      StabilityThresholdTooHigh: AugmentedError<ApiType>;
+      /**
        * The total amount to be reserved is smaller than min budget
        **/
       TotalAmountIsSmallerThanMinBudget: AugmentedError<ApiType>;
       /**
-       * Absolutely trade limit reached reached, leading to retry
+       * Absolutely trade limit reached, leading to retry
        **/
       TradeLimitReached: AugmentedError<ApiType>;
       /**
@@ -697,10 +713,6 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidSignature: AugmentedError<ApiType>;
       /**
-       * Invalid Transaction
-       **/
-      InvalidTransaction: AugmentedError<ApiType>;
-      /**
        * Calculating total payment overflowed
        **/
       PaymentOverflow: AugmentedError<ApiType>;
@@ -739,7 +751,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       BoundAddressCannotBeUsed: AugmentedError<ApiType>;
       /**
-       * EVM Account's nonce is not zero
+       * Active EVM account cannot be bound
        **/
       TruncatedAccountAlreadyUsed: AugmentedError<ApiType>;
       /**
@@ -1259,6 +1271,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       AssetNotFound: AugmentedError<ApiType>;
       /**
+       * The extrinsic is disabled for now.
+       **/
+      Disabled: AugmentedError<ApiType>;
+      /**
        * Signed account is not owner of the deposit.
        **/
       Forbidden: AugmentedError<ApiType>;
@@ -1267,6 +1283,10 @@ declare module '@polkadot/api-base/types/errors' {
        * to protocol maintainers.
        **/
       InconsistentState: AugmentedError<ApiType>;
+      /**
+       * No farms specified to join
+       **/
+      NoFarmEntriesSpecified: AugmentedError<ApiType>;
       /**
        * Oracle could not be found for requested assets.
        **/
@@ -1589,10 +1609,6 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InUse: AugmentedError<ApiType>;
       /**
-       * Invalid non-concrete asset.
-       **/
-      InvalidAssetNotConcrete: AugmentedError<ApiType>;
-      /**
        * Invalid asset, reserve chain could not be determined for it.
        **/
       InvalidAssetUnknownReserve: AugmentedError<ApiType>;
@@ -1797,10 +1813,6 @@ declare module '@polkadot/api-base/types/errors' {
     };
     router: {
       /**
-       * Insufficient asset is not supported for on chain routing
-       **/
-      InsufficientAssetNotSupported: AugmentedError<ApiType>;
-      /**
        * The user has not enough balance to execute the trade
        **/
       InsufficientBalance: AugmentedError<ApiType>;
@@ -1828,6 +1840,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The calculation of route trade amounts failed in the underlying AMM
        **/
       RouteCalculationFailed: AugmentedError<ApiType>;
+      /**
+       * Route contains assets that has no oracle data
+       **/
+      RouteHasNoOracle: AugmentedError<ApiType>;
       /**
        * The route update was not successful
        **/
@@ -2106,6 +2122,10 @@ declare module '@polkadot/api-base/types/errors' {
        * and the new runtime.
        **/
       InvalidSpecName: AugmentedError<ApiType>;
+      /**
+       * A multi-block migration is ongoing and prevents the current code from being replaced.
+       **/
+      MultiBlockMigrationsOngoing: AugmentedError<ApiType>;
       /**
        * Suicide called when the account has non-default composite data.
        **/
@@ -2697,6 +2717,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       DepositDataNotFound: AugmentedError<ApiType>;
       /**
+       * Extrinsic is disasbled for now
+       **/
+      Disabled: AugmentedError<ApiType>;
+      /**
        * Failed to calculate `pot`'s account.
        **/
       FailToGetPotId: AugmentedError<ApiType>;
@@ -2708,6 +2732,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Provided `AssetPair` is not used by the deposit.
        **/
       InvalidAssetPair: AugmentedError<ApiType>;
+      /**
+       * No global farm - yield farm pairs specified to join
+       **/
+      NoFarmsSpecified: AugmentedError<ApiType>;
       /**
        * Account is not deposit owner.
        **/
