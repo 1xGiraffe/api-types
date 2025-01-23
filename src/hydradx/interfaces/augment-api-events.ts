@@ -9,7 +9,7 @@ import type { ApiTypes, AugmentedEvent } from '@polkadot/api-base/types';
 import type { Bytes, Null, Option, Result, U8aFixed, Vec, bool, i128, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, H160, H256, Permill, Perquintill } from '@polkadot/types/interfaces/runtime';
-import type { CumulusPrimitivesCoreAggregateMessageOrigin, EthereumLog, EvmCoreErrorExitReason, FrameSupportDispatchDispatchInfo, FrameSupportMessagesProcessMessageError, FrameSupportTokensMiscBalanceStatus, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletClaimsEthereumAddress, PalletDcaOrder, PalletDemocracyMetadataOwner, PalletDemocracyVoteAccountVote, PalletDemocracyVoteThreshold, PalletLbpPool, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletReferralsAssetAmount, PalletReferralsFeeDistribution, PalletReferralsLevel, PalletStableswapAssetAmount, PalletStableswapTradability, PalletStateTrieMigrationError, PalletStateTrieMigrationMigrationCompute, PalletXykAssetPair, SpRuntimeDispatchError, SpWeightsWeightV2Weight, StagingXcmV4Asset, StagingXcmV4AssetAssets, StagingXcmV4Location, StagingXcmV4Response, StagingXcmV4TraitsOutcome, StagingXcmV4Xcm, XcmV3TraitsError, XcmVersionedAssets, XcmVersionedLocation } from '@polkadot/types/lookup';
+import type { CumulusPrimitivesCoreAggregateMessageOrigin, EthereumLog, EvmCoreErrorExitReason, FrameSupportDispatchDispatchInfo, FrameSupportDispatchPostDispatchInfo, FrameSupportMessagesProcessMessageError, FrameSupportPreimagesBounded, FrameSupportTokensMiscBalanceStatus, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletClaimsEthereumAddress, PalletConvictionVotingTally, PalletDcaOrder, PalletDemocracyMetadataOwner, PalletDemocracyVoteAccountVote, PalletDemocracyVoteThreshold, PalletLbpPool, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletReferralsAssetAmount, PalletReferralsFeeDistribution, PalletReferralsLevel, PalletStableswapAssetAmount, PalletStableswapTradability, PalletStateTrieMigrationError, PalletStateTrieMigrationMigrationCompute, PalletXykAssetPair, SpRuntimeDispatchError, SpRuntimeDispatchErrorWithPostInfo, SpWeightsWeightV2Weight, StagingXcmV4Asset, StagingXcmV4AssetAssets, StagingXcmV4Location, StagingXcmV4Response, StagingXcmV4TraitsOutcome, StagingXcmV4Xcm, XcmV3TraitsError, XcmVersionedAssets, XcmVersionedLocation } from '@polkadot/types/lookup';
 
 export type __AugmentedEvent<ApiType extends ApiTypes> = AugmentedEvent<ApiType>;
 
@@ -237,6 +237,20 @@ declare module '@polkadot/api-base/types/events' {
        * New Invulnerables were set.
        **/
       NewInvulnerables: AugmentedEvent<ApiType, [invulnerables: Vec<AccountId32>], { invulnerables: Vec<AccountId32> }>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
+    };
+    convictionVoting: {
+      /**
+       * An account has delegated their vote to another account. \[who, target\]
+       **/
+      Delegated: AugmentedEvent<ApiType, [AccountId32, AccountId32]>;
+      /**
+       * An \[account\] has cancelled a previous delegation operation.
+       **/
+      Undelegated: AugmentedEvent<ApiType, [AccountId32]>;
       /**
        * Generic event
        **/
@@ -677,6 +691,16 @@ declare module '@polkadot/api-base/types/events' {
        * Sale executed.
        **/
       SellExecuted: AugmentedEvent<ApiType, [who: AccountId32, assetIn: u32, assetOut: u32, amount: u128, salePrice: u128, feeAsset: u32, feeAmount: u128], { who: AccountId32, assetIn: u32, assetOut: u32, amount: u128, salePrice: u128, feeAsset: u32, feeAmount: u128 }>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
+    };
+    liquidation: {
+      /**
+       * Money market position has been liquidated
+       **/
+      Liquidated: AugmentedEvent<ApiType, [liquidator: AccountId32, evmAddress: H160, collateralAsset: u32, debtAsset: u32, debtToCover: u128, profit: u128], { liquidator: AccountId32, evmAddress: H160, collateralAsset: u32, debtAsset: u32, debtToCover: u128, profit: u128 }>;
       /**
        * Generic event
        **/
@@ -1132,6 +1156,70 @@ declare module '@polkadot/api-base/types/events' {
        * disambiguation index and proxy type.
        **/
       PureCreated: AugmentedEvent<ApiType, [pure: AccountId32, who: AccountId32, proxyType: HydradxRuntimeSystemProxyType, disambiguationIndex: u16], { pure: AccountId32, who: AccountId32, proxyType: HydradxRuntimeSystemProxyType, disambiguationIndex: u16 }>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
+    };
+    referenda: {
+      /**
+       * A referendum has been approved and its proposal has been scheduled.
+       **/
+      Approved: AugmentedEvent<ApiType, [index: u32], { index: u32 }>;
+      /**
+       * A referendum has been cancelled.
+       **/
+      Cancelled: AugmentedEvent<ApiType, [index: u32, tally: PalletConvictionVotingTally], { index: u32, tally: PalletConvictionVotingTally }>;
+      ConfirmAborted: AugmentedEvent<ApiType, [index: u32], { index: u32 }>;
+      /**
+       * A referendum has ended its confirmation phase and is ready for approval.
+       **/
+      Confirmed: AugmentedEvent<ApiType, [index: u32, tally: PalletConvictionVotingTally], { index: u32, tally: PalletConvictionVotingTally }>;
+      ConfirmStarted: AugmentedEvent<ApiType, [index: u32], { index: u32 }>;
+      /**
+       * The decision deposit has been placed.
+       **/
+      DecisionDepositPlaced: AugmentedEvent<ApiType, [index: u32, who: AccountId32, amount: u128], { index: u32, who: AccountId32, amount: u128 }>;
+      /**
+       * The decision deposit has been refunded.
+       **/
+      DecisionDepositRefunded: AugmentedEvent<ApiType, [index: u32, who: AccountId32, amount: u128], { index: u32, who: AccountId32, amount: u128 }>;
+      /**
+       * A referendum has moved into the deciding phase.
+       **/
+      DecisionStarted: AugmentedEvent<ApiType, [index: u32, track: u16, proposal: FrameSupportPreimagesBounded, tally: PalletConvictionVotingTally], { index: u32, track: u16, proposal: FrameSupportPreimagesBounded, tally: PalletConvictionVotingTally }>;
+      /**
+       * A deposit has been slashed.
+       **/
+      DepositSlashed: AugmentedEvent<ApiType, [who: AccountId32, amount: u128], { who: AccountId32, amount: u128 }>;
+      /**
+       * A referendum has been killed.
+       **/
+      Killed: AugmentedEvent<ApiType, [index: u32, tally: PalletConvictionVotingTally], { index: u32, tally: PalletConvictionVotingTally }>;
+      /**
+       * Metadata for a referendum has been cleared.
+       **/
+      MetadataCleared: AugmentedEvent<ApiType, [index: u32, hash_: H256], { index: u32, hash_: H256 }>;
+      /**
+       * Metadata for a referendum has been set.
+       **/
+      MetadataSet: AugmentedEvent<ApiType, [index: u32, hash_: H256], { index: u32, hash_: H256 }>;
+      /**
+       * A proposal has been rejected by referendum.
+       **/
+      Rejected: AugmentedEvent<ApiType, [index: u32, tally: PalletConvictionVotingTally], { index: u32, tally: PalletConvictionVotingTally }>;
+      /**
+       * The submission deposit has been refunded.
+       **/
+      SubmissionDepositRefunded: AugmentedEvent<ApiType, [index: u32, who: AccountId32, amount: u128], { index: u32, who: AccountId32, amount: u128 }>;
+      /**
+       * A referendum has been submitted.
+       **/
+      Submitted: AugmentedEvent<ApiType, [index: u32, track: u16, proposal: FrameSupportPreimagesBounded], { index: u32, track: u16, proposal: FrameSupportPreimagesBounded }>;
+      /**
+       * A referendum has been timed out without being decided.
+       **/
+      TimedOut: AugmentedEvent<ApiType, [index: u32, tally: PalletConvictionVotingTally], { index: u32, tally: PalletConvictionVotingTally }>;
       /**
        * Generic event
        **/
@@ -1769,6 +1857,15 @@ declare module '@polkadot/api-base/types/events' {
        * Updated vesting schedules.
        **/
       VestingSchedulesUpdated: AugmentedEvent<ApiType, [who: AccountId32], { who: AccountId32 }>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
+    };
+    whitelist: {
+      CallWhitelisted: AugmentedEvent<ApiType, [callHash: H256], { callHash: H256 }>;
+      WhitelistedCallDispatched: AugmentedEvent<ApiType, [callHash: H256, result: Result<FrameSupportDispatchPostDispatchInfo, SpRuntimeDispatchErrorWithPostInfo>], { callHash: H256, result: Result<FrameSupportDispatchPostDispatchInfo, SpRuntimeDispatchErrorWithPostInfo> }>;
+      WhitelistedCallRemoved: AugmentedEvent<ApiType, [callHash: H256], { callHash: H256 }>;
       /**
        * Generic event
        **/

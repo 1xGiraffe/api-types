@@ -293,6 +293,61 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
+    convictionVoting: {
+      /**
+       * The account is already delegating.
+       **/
+      AlreadyDelegating: AugmentedError<ApiType>;
+      /**
+       * The account currently has votes attached to it and the operation cannot succeed until
+       * these are removed through `remove_vote`.
+       **/
+      AlreadyVoting: AugmentedError<ApiType>;
+      /**
+       * The class ID supplied is invalid.
+       **/
+      BadClass: AugmentedError<ApiType>;
+      /**
+       * The class must be supplied since it is not easily determinable from the state.
+       **/
+      ClassNeeded: AugmentedError<ApiType>;
+      /**
+       * Too high a balance was provided that the account cannot afford.
+       **/
+      InsufficientFunds: AugmentedError<ApiType>;
+      /**
+       * Maximum number of votes reached.
+       **/
+      MaxVotesReached: AugmentedError<ApiType>;
+      /**
+       * Delegation to oneself makes no sense.
+       **/
+      Nonsense: AugmentedError<ApiType>;
+      /**
+       * The actor has no permission to conduct the action.
+       **/
+      NoPermission: AugmentedError<ApiType>;
+      /**
+       * The actor has no permission to conduct the action right now but will do in the future.
+       **/
+      NoPermissionYet: AugmentedError<ApiType>;
+      /**
+       * The account is not currently delegating.
+       **/
+      NotDelegating: AugmentedError<ApiType>;
+      /**
+       * Poll is not ongoing.
+       **/
+      NotOngoing: AugmentedError<ApiType>;
+      /**
+       * The given account did not vote on the poll.
+       **/
+      NotVoter: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
     council: {
       /**
        * Members are already initialized!
@@ -967,6 +1022,28 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
+    liquidation: {
+      /**
+       * AssetId to EVM address conversion failed
+       **/
+      AssetConversionFailed: AugmentedError<ApiType>;
+      /**
+       * Provided route doesn't match the existing route
+       **/
+      InvalidRoute: AugmentedError<ApiType>;
+      /**
+       * Liquidation call failed
+       **/
+      LiquidationCallFailed: AugmentedError<ApiType>;
+      /**
+       * Liquidation was not profitable enough to repay flash loan
+       **/
+      NotProfitable: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
     messageQueue: {
       /**
        * The message was already processed and cannot be processed again.
@@ -1270,10 +1347,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Asset is not in the omnipool.
        **/
       AssetNotFound: AugmentedError<ApiType>;
-      /**
-       * The extrinsic is disabled for now.
-       **/
-      Disabled: AugmentedError<ApiType>;
       /**
        * Signed account is not owner of the deposit.
        **/
@@ -1738,6 +1811,68 @@ declare module '@polkadot/api-base/types/errors' {
        * A call which is incompatible with the proxy type's filter was attempted.
        **/
       Unproxyable: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
+    referenda: {
+      /**
+       * The referendum index provided is invalid in this context.
+       **/
+      BadReferendum: AugmentedError<ApiType>;
+      /**
+       * The referendum status is invalid for this operation.
+       **/
+      BadStatus: AugmentedError<ApiType>;
+      /**
+       * The track identifier given was invalid.
+       **/
+      BadTrack: AugmentedError<ApiType>;
+      /**
+       * There are already a full complement of referenda in progress for this track.
+       **/
+      Full: AugmentedError<ApiType>;
+      /**
+       * Referendum's decision deposit is already paid.
+       **/
+      HasDeposit: AugmentedError<ApiType>;
+      /**
+       * The deposit cannot be refunded since none was made.
+       **/
+      NoDeposit: AugmentedError<ApiType>;
+      /**
+       * The deposit refunder is not the depositor.
+       **/
+      NoPermission: AugmentedError<ApiType>;
+      /**
+       * There was nothing to do in the advancement.
+       **/
+      NothingToDo: AugmentedError<ApiType>;
+      /**
+       * Referendum is not ongoing.
+       **/
+      NotOngoing: AugmentedError<ApiType>;
+      /**
+       * No track exists for the proposal origin.
+       **/
+      NoTrack: AugmentedError<ApiType>;
+      /**
+       * The preimage does not exist.
+       **/
+      PreimageNotExist: AugmentedError<ApiType>;
+      /**
+       * The preimage is stored with a different length than the one provided.
+       **/
+      PreimageStoredWithDifferentLength: AugmentedError<ApiType>;
+      /**
+       * The queue of the track is empty.
+       **/
+      QueueEmpty: AugmentedError<ApiType>;
+      /**
+       * Any deposit cannot be refunded until after the decision is over.
+       **/
+      Unfinished: AugmentedError<ApiType>;
       /**
        * Generic error
        **/
@@ -2480,6 +2615,32 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
+    whitelist: {
+      /**
+       * The call was already whitelisted; No-Op.
+       **/
+      CallAlreadyWhitelisted: AugmentedError<ApiType>;
+      /**
+       * The call was not whitelisted.
+       **/
+      CallIsNotWhitelisted: AugmentedError<ApiType>;
+      /**
+       * The weight of the decoded call was higher than the witness.
+       **/
+      InvalidCallWeightWitness: AugmentedError<ApiType>;
+      /**
+       * The preimage of the call hash could not be loaded.
+       **/
+      UnavailablePreImage: AugmentedError<ApiType>;
+      /**
+       * The call could not be decoded.
+       **/
+      UndecodableCall: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
     xcmpQueue: {
       /**
        * The execution is already resumed.
@@ -2716,10 +2877,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Deposit data not found
        **/
       DepositDataNotFound: AugmentedError<ApiType>;
-      /**
-       * Extrinsic is disasbled for now
-       **/
-      Disabled: AugmentedError<ApiType>;
       /**
        * Failed to calculate `pot`'s account.
        **/

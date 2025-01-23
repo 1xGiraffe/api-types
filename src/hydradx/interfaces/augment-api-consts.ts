@@ -6,10 +6,10 @@
 import '@polkadot/api-base/types/consts';
 
 import type { ApiTypes, AugmentedConst } from '@polkadot/api-base/types';
-import type { Null, Option, RangeInclusive, U8aFixed, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
+import type { Null, Option, RangeInclusive, U8aFixed, Vec, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { Codec, ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, Perbill, Percent, Permill } from '@polkadot/types/interfaces/runtime';
-import type { FrameSupportPalletId, FrameSystemLimitsBlockLength, FrameSystemLimitsBlockWeights, HydradxTraitsOracleOraclePeriod, PalletDynamicFeesFeeParams, SpVersionRuntimeVersion, SpWeightsRuntimeDbWeight, SpWeightsWeightV2Weight, StagingXcmV4Location } from '@polkadot/types/lookup';
+import type { FrameSupportPalletId, FrameSystemLimitsBlockLength, FrameSystemLimitsBlockWeights, HydradxTraitsOracleOraclePeriod, PalletDynamicFeesFeeParams, PalletReferendaTrackInfo, SpVersionRuntimeVersion, SpWeightsRuntimeDbWeight, SpWeightsWeightV2Weight, StagingXcmV4Location } from '@polkadot/types/lookup';
 
 export type __AugmentedConst<ApiType extends ApiTypes> = AugmentedConst<ApiType>;
 
@@ -131,6 +131,26 @@ declare module '@polkadot/api-base/types/consts' {
        * Reward amount per one collator.
        **/
       rewardPerCollator: u128 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    convictionVoting: {
+      /**
+       * The maximum number of concurrent votes an account may have.
+       * 
+       * Also used to compute weight, an overly large value can lead to extrinsics with large
+       * weight estimation: see `delegate` for instance.
+       **/
+      maxVotes: u32 & AugmentedConst<ApiType>;
+      /**
+       * The minimum period of vote locking.
+       * 
+       * It should be no shorter than enactment period to ensure that in the case of an approval,
+       * those successful voters are locked into the consequences that their votes entail.
+       **/
+      voteLockingPeriod: u32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -457,6 +477,20 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       [key: string]: Codec;
     };
+    liquidation: {
+      /**
+       * The gas limit for the execution of the liquidation call.
+       **/
+      gasLimit: u64 & AugmentedConst<ApiType>;
+      /**
+       * Account who receives the profit.
+       **/
+      profitReceiver: AccountId32 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
     messageQueue: {
       /**
        * The size of the page; this implies the maximum message size which can be sent.
@@ -717,6 +751,35 @@ declare module '@polkadot/api-base/types/consts' {
        * into account `32 + proxy_type.encode().len()` bytes of data.
        **/
       proxyDepositFactor: u128 & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
+    referenda: {
+      /**
+       * Quantization level for the referendum wakeup scheduler. A higher number will result in
+       * fewer storage reads/writes needed for smaller voters, but also result in delays to the
+       * automatic referendum status changes. Explicit servicing instructions are unaffected.
+       **/
+      alarmInterval: u32 & AugmentedConst<ApiType>;
+      /**
+       * Maximum size of the referendum queue for a single track.
+       **/
+      maxQueued: u32 & AugmentedConst<ApiType>;
+      /**
+       * The minimum amount to be used as a deposit for a public referendum proposal.
+       **/
+      submissionDeposit: u128 & AugmentedConst<ApiType>;
+      /**
+       * Information concerning the different referendum tracks.
+       **/
+      tracks: Vec<ITuple<[u16, PalletReferendaTrackInfo]>> & AugmentedConst<ApiType>;
+      /**
+       * The number of blocks after submission that a referendum must begin being decided by.
+       * Once this passes, then anyone may cancel the referendum.
+       **/
+      undecidingTimeout: u32 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
