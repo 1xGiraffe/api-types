@@ -165,6 +165,20 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
+    broadcast: {
+      /**
+       * The execution context call stack has reached its maximum size
+       **/
+      ExecutionCallStackOverflow: AugmentedError<ApiType>;
+      /**
+       * The execution context call stack is empty, unable to decrease level
+       **/
+      ExecutionCallStackUnderflow: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
     circuitBreaker: {
       /**
        * Invalid value for a limit. Limit must be non-zero.
@@ -712,8 +726,16 @@ declare module '@polkadot/api-base/types/errors' {
       [key: string]: AugmentedError<ApiType>;
     };
     emaOracle: {
+      /**
+       * Asset not found
+       **/
+      AssetNotFound: AugmentedError<ApiType>;
       OnTradeValueZero: AugmentedError<ApiType>;
       OracleNotFound: AugmentedError<ApiType>;
+      /**
+       * The new price is outside the max allowed range
+       **/
+      PriceOutsideAllowedRange: AugmentedError<ApiType>;
       TooManyUniqueEntries: AugmentedError<ApiType>;
       /**
        * Generic error
@@ -1310,13 +1332,13 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       PositionNotFound: AugmentedError<ApiType>;
       /**
-       * Imbalance results in positive value.
-       **/
-      PositiveImbalance: AugmentedError<ApiType>;
-      /**
        * Max allowed price difference has been exceeded.
        **/
       PriceDifferenceTooHigh: AugmentedError<ApiType>;
+      /**
+       * Extra protocol fee has not been consumed.
+       **/
+      ProtocolFeeNotConsumed: AugmentedError<ApiType>;
       /**
        * Sell or buy with same asset ids is not allowed.
        **/
@@ -2058,9 +2080,17 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       BuyLimitNotReached: AugmentedError<ApiType>;
       /**
+       * Creating pool with pegs is not allowed for asset with different decimals.
+       **/
+      IncorrectAssetDecimals: AugmentedError<ApiType>;
+      /**
        * Creating a pool with same assets or less than 2 assets is not allowed.
        **/
       IncorrectAssets: AugmentedError<ApiType>;
+      /**
+       * List of provided pegs is incorrect.
+       **/
+      IncorrectInitialPegs: AugmentedError<ApiType>;
       /**
        * Balance of an asset is not sufficient to perform a trade.
        **/
@@ -2101,6 +2131,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Maximum number of assets has been exceeded.
        **/
       MaxAssetsExceeded: AugmentedError<ApiType>;
+      /**
+       * FAiled to retrieve oracle entry.
+       **/
+      MissingTargetPegOracle: AugmentedError<ApiType>;
       /**
        * Not allowed to perform an operation on given asset.
        **/
@@ -2447,10 +2481,6 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InsufficientPermission: AugmentedError<ApiType>;
       /**
-       * Proposer's balance is too low.
-       **/
-      InsufficientProposersBalance: AugmentedError<ApiType>;
-      /**
        * No proposal, bounty or spend at that index.
        **/
       InvalidIndex: AugmentedError<ApiType>;
@@ -2654,6 +2684,14 @@ declare module '@polkadot/api-base/types/errors' {
        * Setting the queue config failed since one of its values was invalid.
        **/
       BadQueueConfig: AugmentedError<ApiType>;
+      /**
+       * The message is too big.
+       **/
+      TooBig: AugmentedError<ApiType>;
+      /**
+       * There are too many active outbound channels.
+       **/
+      TooManyActiveOutboundChannels: AugmentedError<ApiType>;
       /**
        * Generic error
        **/
