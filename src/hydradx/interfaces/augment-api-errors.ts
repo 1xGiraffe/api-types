@@ -2080,17 +2080,9 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       BuyLimitNotReached: AugmentedError<ApiType>;
       /**
-       * Creating pool with pegs is not allowed for asset with different decimals.
-       **/
-      IncorrectAssetDecimals: AugmentedError<ApiType>;
-      /**
        * Creating a pool with same assets or less than 2 assets is not allowed.
        **/
       IncorrectAssets: AugmentedError<ApiType>;
-      /**
-       * List of provided pegs is incorrect.
-       **/
-      IncorrectInitialPegs: AugmentedError<ApiType>;
       /**
        * Balance of an asset is not sufficient to perform a trade.
        **/
@@ -2131,10 +2123,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Maximum number of assets has been exceeded.
        **/
       MaxAssetsExceeded: AugmentedError<ApiType>;
-      /**
-       * FAiled to retrieve oracle entry.
-       **/
-      MissingTargetPegOracle: AugmentedError<ApiType>;
       /**
        * Not allowed to perform an operation on given asset.
        **/
