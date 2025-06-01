@@ -10,7 +10,7 @@ import type { Data } from '@polkadot/types';
 import type { Bytes, Compact, Null, Option, U256, U8aFixed, Vec, bool, i128, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { AnyNumber, IMethod, ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, Call, H160, H256, Permill, Perquintill } from '@polkadot/types/interfaces/runtime';
-import type { CumulusPrimitivesCoreAggregateMessageOrigin, CumulusPrimitivesParachainInherentParachainInherentData, EthereumTransactionTransactionV2, FrameSupportPreimagesBounded, FrameSupportScheduleDispatchTime, HydradxRuntimeOpaqueSessionKeys, HydradxRuntimeOriginCaller, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, HydradxTraitsRouterAssetPair, HydradxTraitsRouterTrade, HydradxTraitsStableswapAssetAmount, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletBalancesAdjustmentDirection, PalletClaimsEcdsaSignature, PalletConvictionVotingConviction, PalletConvictionVotingVoteAccountVote, PalletDcaSchedule, PalletDemocracyConviction, PalletDemocracyMetadataOwner, PalletDemocracyVoteAccountVote, PalletElectionsPhragmenRenouncing, PalletIdentityJudgement, PalletIdentityLegacyIdentityInfo, PalletLbpWeightCurveType, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletReferralsFeeDistribution, PalletReferralsLevel, PalletStableswapTradability, PalletStateTrieMigrationMigrationLimits, PalletStateTrieMigrationMigrationTask, PalletStateTrieMigrationProgress, PalletUniquesDestroyWitness, PalletXykAssetPair, SpRuntimeMultiSignature, SpWeightsWeightV2Weight, StagingXcmExecutorAssetTransferTransferType, StagingXcmV4Location, XcmV3WeightLimit, XcmVersionedAsset, XcmVersionedAssetId, XcmVersionedAssets, XcmVersionedLocation, XcmVersionedXcm } from '@polkadot/types/lookup';
+import type { CumulusPrimitivesCoreAggregateMessageOrigin, CumulusPrimitivesParachainInherentParachainInherentData, EthereumTransactionTransactionV2, FrameSupportPreimagesBounded, FrameSupportScheduleDispatchTime, HydradxRuntimeOpaqueSessionKeys, HydradxRuntimeOriginCaller, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, HydradxTraitsRouterAssetPair, HydradxTraitsRouterTrade, HydradxTraitsStableswapAssetAmount, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletBalancesAdjustmentDirection, PalletClaimsEcdsaSignature, PalletConvictionVotingConviction, PalletConvictionVotingVoteAccountVote, PalletDcaSchedule, PalletDemocracyConviction, PalletDemocracyMetadataOwner, PalletDemocracyVoteAccountVote, PalletElectionsPhragmenRenouncing, PalletIdentityJudgement, PalletIdentityLegacyIdentityInfo, PalletLbpWeightCurveType, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletReferralsFeeDistribution, PalletReferralsLevel, PalletStableswapPegSource, PalletStableswapTradability, PalletStateTrieMigrationMigrationLimits, PalletStateTrieMigrationMigrationTask, PalletStateTrieMigrationProgress, PalletUniquesDestroyWitness, PalletXykAssetPair, SpRuntimeMultiSignature, SpWeightsWeightV2Weight, StagingXcmExecutorAssetTransferTransferType, StagingXcmV4Location, XcmV3WeightLimit, XcmVersionedAsset, XcmVersionedAssetId, XcmVersionedAssets, XcmVersionedLocation, XcmVersionedXcm } from '@polkadot/types/lookup';
 
 export type __AugmentedSubmittable = AugmentedSubmittable<() => unknown>;
 export type __SubmittableExtrinsic<ApiType extends ApiTypes> = SubmittableExtrinsic<ApiType>;
@@ -968,6 +968,13 @@ declare module '@polkadot/api-base/types/submittable' {
     dispatcher: {
       dispatchAsAaveManager: AugmentedSubmittable<(call: Call | IMethod | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Call]>;
       dispatchAsTreasury: AugmentedSubmittable<(call: Call | IMethod | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Call]>;
+      /**
+       * Dispatch a call with extra gas.
+       * 
+       * This allows executing calls with additional weight (gas) limit.
+       * The extra gas is not refunded, even if not used.
+       **/
+      dispatchWithExtraGas: AugmentedSubmittable<(call: Call | IMethod | string | Uint8Array, extraGas: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Call, u64]>;
       /**
        * Sets the Aave manager account to be used as origin for dispatching calls.
        * 
@@ -3328,6 +3335,30 @@ declare module '@polkadot/api-base/types/submittable' {
       /**
        * Add liquidity to selected pool.
        * 
+       * First call of `add_assets_liquidity` must provide "initial liquidity" of all assets.
+       * 
+       * If there is liquidity already in the pool, LP can provide liquidity of any number of pool assets.
+       * 
+       * LP must have sufficient amount of each asset.
+       * 
+       * Origin is given corresponding amount of shares.
+       * 
+       * Parameters:
+       * - `origin`: liquidity provider
+       * - `pool_id`: Pool Id
+       * - `assets`: asset id and liquidity amount provided
+       * - `min_shares`: minimum amount of shares to receive
+       * 
+       * Emits `LiquidityAdded` event when successful.
+       * Emits `pallet_broadcast::Swapped` event when successful.
+       **/
+      addAssetsLiquidity: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, assets: Vec<HydradxTraitsStableswapAssetAmount> | (HydradxTraitsStableswapAssetAmount | { assetId?: any; amount?: any } | string | Uint8Array)[], minShares: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, Vec<HydradxTraitsStableswapAssetAmount>, u128]>;
+      /**
+       * Add liquidity to selected pool.
+       * 
+       * Use `add_assets_liquidity` instead.
+       * This extrinsics will be removed in the future.
+       * 
        * First call of `add_liquidity` must provide "initial liquidity" of all assets.
        * 
        * If there is liquidity already in the pool, LP can provide liquidity of any number of pool assets.
@@ -3364,7 +3395,7 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       addLiquidityShares: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, shares: u128 | AnyNumber | Uint8Array, assetId: u32 | AnyNumber | Uint8Array, maxAssetAmount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u128, u32, u128]>;
       /**
-       * Execute a swap of `asset_in` for `asset_out`.
+       * Execute a swap of `asset_out` for `asset_in`.
        * 
        * Parameters:
        * - `origin`:
@@ -3383,7 +3414,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * Create a stable pool with given list of assets.
        * 
        * All assets must be correctly registered in `T::AssetRegistry`.
-       * Note that this does not seed the pool with liquidity. Use `add_liquidity` to provide
+       * Note that this does not seed the pool with liquidity. Use `add_assets_liquidity` to provide
        * initial liquidity.
        * 
        * Parameters:
@@ -3396,6 +3427,67 @@ declare module '@polkadot/api-base/types/submittable' {
        * Emits `PoolCreated` event if successful.
        **/
       createPool: AugmentedSubmittable<(shareAsset: u32 | AnyNumber | Uint8Array, assets: Vec<u32> | (u32 | AnyNumber | Uint8Array)[], amplification: u16 | AnyNumber | Uint8Array, fee: Permill | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, Vec<u32>, u16, Permill]>;
+      /**
+       * Create a stable pool with a given list of assets and pegs.
+       * 
+       * This function allows the creation of a new stable pool with specified assets, amplification, fee, and peg sources. The pool is identified by a share asset.
+       * 
+       * Peg target price is determined by retrieving the target peg from the oracle - it is the price of the asset from the peg sourcedenominated in the other pool assets.
+       * 
+       * Parameters:
+       * - `origin`: Must be `T::AuthorityOrigin`.
+       * - `share_asset`: Preregistered share asset identifier.
+       * - `assets`: List of asset IDs to be included in the pool.
+       * - `amplification`: Pool amplification parameter.
+       * - `fee`: Fee to be applied on trade and liquidity operations.
+       * - `peg_source`: Bounded vector specifying the source of the peg for each asset.
+       * - `max_peg_update`: Maximum allowed peg update per block.
+       * 
+       * Emits `PoolCreated` event if successful.
+       * Emits `AmplificationChanging` event if successful.
+       * 
+       * # Errors
+       * - `IncorrectAssets`: If the assets are the same or less than 2 assets are provided.
+       * - `MaxAssetsExceeded`: If the maximum number of assets is exceeded.
+       * - `PoolExists`: If a pool with the given assets already exists.
+       * - `ShareAssetInPoolAssets`: If the share asset is among the pool assets.
+       * - `AssetNotRegistered`: If one or more assets are not registered in the AssetRegistry.
+       * - `InvalidAmplification`: If the amplification parameter is invalid.
+       * - `IncorrectInitialPegs`: If the initial pegs are incorrect.
+       * - `MissingTargetPegOracle`: If the target peg oracle entry is missing.
+       * - `IncorrectAssetDecimals`: If the assets have different decimals.
+       * 
+       **/
+      createPoolWithPegs: AugmentedSubmittable<(shareAsset: u32 | AnyNumber | Uint8Array, assets: Vec<u32> | (u32 | AnyNumber | Uint8Array)[], amplification: u16 | AnyNumber | Uint8Array, fee: Permill | AnyNumber | Uint8Array, pegSource: Vec<PalletStableswapPegSource> | (PalletStableswapPegSource | { Value: any } | { Oracle: any } | string | Uint8Array)[], maxPegUpdate: Permill | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, Vec<u32>, u16, Permill, Vec<PalletStableswapPegSource>, Permill]>;
+      /**
+       * Remove liquidity from a selected pool uniformly.
+       * 
+       * This function allows a liquidity provider to withdraw liquidity from a pool.
+       * The provider specifies the amount of shares to burn and the minimum amounts of each asset to receive.
+       * 
+       * Parameters:
+       * - `origin`: The liquidity provider.
+       * - `pool_id`: The ID of the pool from which to remove liquidity.
+       * - `share_amount`: The amount of shares to burn.
+       * - `min_amounts_out`: A bounded vector specifying the minimum amounts of each asset to receive.
+       * 
+       * Emits `LiquidityRemoved` event when successful.
+       * Emits `pallet_broadcast::Swapped` event when successful.
+       * 
+       * # Errors
+       * - `InvalidAssetAmount`: If the `share_amount` is zero.
+       * - `InsufficientShares`: If the provider does not have enough shares.
+       * - `PoolNotFound`: If the specified pool does not exist.
+       * - `UnknownDecimals`: If the asset decimals cannot be retrieved.
+       * - `IncorrectAssets`: If the provided `min_amounts_out` does not match the pool assets.
+       * - `NotAllowed`: If the asset is not allowed for the operation.
+       * - `SlippageLimit`: If the amount received is less than the specified minimum amount.
+       * - `InsufficientLiquidityRemaining`: If the remaining liquidity in the pool is below the minimum required.
+       * 
+       * # Invariants
+       * - Ensures that the pool's reserves are updated correctly after liquidity removal.
+       * - Ensures that the pool's invariant is maintained.
+       **/
       removeLiquidity: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, shareAmount: u128 | AnyNumber | Uint8Array, minAmountsOut: Vec<HydradxTraitsStableswapAssetAmount> | (HydradxTraitsStableswapAssetAmount | { assetId?: any; amount?: any } | string | Uint8Array)[]) => SubmittableExtrinsic<ApiType>, [u32, u128, Vec<HydradxTraitsStableswapAssetAmount>]>;
       /**
        * Remove liquidity from selected pool.
@@ -3433,6 +3525,24 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        **/
       sell: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, assetIn: u32 | AnyNumber | Uint8Array, assetOut: u32 | AnyNumber | Uint8Array, amountIn: u128 | AnyNumber | Uint8Array, minBuyAmount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u32, u128, u128]>;
+      /**
+       * Update the tradable state of a specific asset in a pool.
+       * 
+       * This function allows updating the tradability state of an asset within a pool. The tradability state determines whether the asset can be used for specific operations such as adding liquidity, removing liquidity, buying, or selling.
+       * 
+       * Parameters:
+       * - `origin`: Must be `T::UpdateTradabilityOrigin`.
+       * - `pool_id`: The ID of the pool containing the asset.
+       * - `asset_id`: The ID of the asset whose tradability state is to be updated.
+       * - `state`: The new tradability state of the asset.
+       * 
+       * Emits `TradableStateUpdated` event when successful.
+       * 
+       * # Errors
+       * - `PoolNotFound`: If the specified pool does not exist.
+       * - `AssetNotInPool`: If the specified asset is not part of the pool.
+       * 
+       **/
       setAssetTradableState: AugmentedSubmittable<(poolId: u32 | AnyNumber | Uint8Array, assetId: u32 | AnyNumber | Uint8Array, state: PalletStableswapTradability | { bits?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, PalletStableswapTradability]>;
       /**
        * Update pool's amplification.
@@ -3440,8 +3550,9 @@ declare module '@polkadot/api-base/types/submittable' {
        * Parameters:
        * - `origin`: Must be T::AuthorityOrigin
        * - `pool_id`: pool to update
-       * - `future_amplification`: new desired pool amplification
-       * - `future_block`: future block number when the amplification is updated
+       * - `final_amplification`: new desired pool amplification
+       * - `start_block`: block number when the amplification starts to move towards final_amplication
+       * - `end_block`: block number when the amplification reaches final_amplification
        * 
        * Emits `AmplificationUpdated` event if successful.
        **/
@@ -4871,6 +4982,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * Emits `LiquidityAdded` event when successful.
        **/
       addLiquidity: AugmentedSubmittable<(assetA: u32 | AnyNumber | Uint8Array, assetB: u32 | AnyNumber | Uint8Array, amountA: u128 | AnyNumber | Uint8Array, amountBMaxLimit: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u128, u128]>;
+      addLiquidityWithLimits: AugmentedSubmittable<(assetA: u32 | AnyNumber | Uint8Array, assetB: u32 | AnyNumber | Uint8Array, amountA: u128 | AnyNumber | Uint8Array, amountBMaxLimit: u128 | AnyNumber | Uint8Array, minShares: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u128, u128, u128]>;
       /**
        * Trade asset in for asset out.
        * 
@@ -4901,7 +5013,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * Emits 'LiquidityRemoved' when successful.
        * Emits 'PoolDestroyed' when pool is destroyed.
        **/
-      removeLiquidity: AugmentedSubmittable<(assetA: u32 | AnyNumber | Uint8Array, assetB: u32 | AnyNumber | Uint8Array, liquidityAmount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u128]>;
+      removeLiquidity: AugmentedSubmittable<(assetA: u32 | AnyNumber | Uint8Array, assetB: u32 | AnyNumber | Uint8Array, shareAmount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u128]>;
+      removeLiquidityWithLimits: AugmentedSubmittable<(assetA: u32 | AnyNumber | Uint8Array, assetB: u32 | AnyNumber | Uint8Array, shareAmount: u128 | AnyNumber | Uint8Array, minAmountA: u128 | AnyNumber | Uint8Array, minAmountB: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32, u128, u128, u128]>;
       /**
        * Trade asset in for asset out.
        * 
