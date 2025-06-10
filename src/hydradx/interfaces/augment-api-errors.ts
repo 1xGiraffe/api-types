@@ -836,6 +836,138 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
+    hsm: {
+      /**
+       * Asset is already approved as collateral
+       * 
+       * Attempted to add an asset that is already registered as a collateral.
+       **/
+      AssetAlreadyApproved: AugmentedError<ApiType>;
+      /**
+       * Asset is not approved as collateral
+       * 
+       * The operation attempted to use an asset that is not registered as an approved collateral.
+       **/
+      AssetNotApproved: AugmentedError<ApiType>;
+      /**
+       * Asset not in the pool
+       * 
+       * The specified asset was not found in the pool.
+       **/
+      AssetNotFound: AugmentedError<ApiType>;
+      /**
+       * Asset not in the pool
+       * 
+       * The collateral asset is not present in the specified pool.
+       **/
+      AssetNotInPool: AugmentedError<ApiType>;
+      /**
+       * Collateral is not empty
+       * 
+       * Cannot remove a collateral asset that still has a non-zero balance in the HSM account.
+       **/
+      CollateralNotEmpty: AugmentedError<ApiType>;
+      /**
+       * Decimal retrieval failed
+       * 
+       * Failed to retrieve the decimal information for an asset.
+       **/
+      DecimalRetrievalFailed: AugmentedError<ApiType>;
+      /**
+       * Flash minter address not set
+       **/
+      FlashMinterNotSet: AugmentedError<ApiType>;
+      /**
+       * GHO Contract address not found
+       * 
+       * The EVM address for the GHO (Hollar) token contract was not found.
+       **/
+      HollarContractAddressNotFound: AugmentedError<ApiType>;
+      /**
+       * Hollar is not in the pool
+       * 
+       * The Hollar asset is not present in the specified pool.
+       **/
+      HollarNotInPool: AugmentedError<ApiType>;
+      /**
+       * Insufficient collateral balance
+       * 
+       * The HSM does not have enough of the collateral asset to complete the operation.
+       **/
+      InsufficientCollateralBalance: AugmentedError<ApiType>;
+      /**
+       * Provided arbitrage data is invalid
+       **/
+      InvalidArbitrageData: AugmentedError<ApiType>;
+      /**
+       * Invalid asset pair, must be Hollar and approved collateral
+       * 
+       * The asset pair for buy/sell operations must include Hollar as one side and an approved collateral as the other.
+       **/
+      InvalidAssetPair: AugmentedError<ApiType>;
+      /**
+       * Invalid EVM contract interaction
+       * 
+       * The call to the EVM contract (GHO Hollar token) failed.
+       **/
+      InvalidEVMInteraction: AugmentedError<ApiType>;
+      /**
+       * Provided pool state is invalid
+       * 
+       * The retrieved pool state has inconsistent or invalid data.
+       **/
+      InvalidPoolState: AugmentedError<ApiType>;
+      /**
+       * Max buy back amount in single block exceeded
+       * 
+       * The amount of Hollar being sold to HSM exceeds the maximum allowed in a single block for this collateral.
+       **/
+      MaxBuyBackExceeded: AugmentedError<ApiType>;
+      /**
+       * Max buy price exceeded
+       * 
+       * The calculated buy price exceeds the maximum allowed buy price for the collateral.
+       **/
+      MaxBuyPriceExceeded: AugmentedError<ApiType>;
+      /**
+       * Max holding amount for collateral exceeded
+       * 
+       * The operation would cause the HSM to hold more of the collateral than the configured maximum.
+       **/
+      MaxHoldingExceeded: AugmentedError<ApiType>;
+      /**
+       * HSM contains maximum number of allowed collateral assets.
+       **/
+      MaxNumberOfCollateralsReached: AugmentedError<ApiType>;
+      /**
+       * No arbitrage opportunity
+       * 
+       * There is no profitable arbitrage opportunity for the specified collateral.
+       **/
+      NoArbitrageOpportunity: AugmentedError<ApiType>;
+      /**
+       * Offchain lock error
+       * 
+       * Failed to acquire the lock for offchain workers, likely because another operation is in progress.
+       **/
+      OffchainLockError: AugmentedError<ApiType>;
+      /**
+       * Another asset from the same pool is already approved
+       * 
+       * Only one asset from each StableSwap pool can be used as collateral.
+       **/
+      PoolAlreadyHasCollateral: AugmentedError<ApiType>;
+      /**
+       * Slippage limit exceeded
+       * 
+       * The calculated amount is worse than the provided slippage limit.
+       **/
+      SlippageLimitExceeded: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
+    };
     identity: {
       /**
        * Account ID is already named.
@@ -1049,6 +1181,14 @@ declare module '@polkadot/api-base/types/errors' {
        * AssetId to EVM address conversion failed
        **/
       AssetConversionFailed: AugmentedError<ApiType>;
+      /**
+       * Flash minter contract address not set. It is required for Hollar liquidations.
+       **/
+      FlashMinterNotSet: AugmentedError<ApiType>;
+      /**
+       * Invalid liquidation data provided
+       **/
+      InvalidLiquidationData: AugmentedError<ApiType>;
       /**
        * Provided route doesn't match the existing route
        **/

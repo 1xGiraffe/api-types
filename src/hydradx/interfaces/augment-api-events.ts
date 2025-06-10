@@ -8,7 +8,7 @@ import '@polkadot/api-base/types/events';
 import type { ApiTypes, AugmentedEvent } from '@polkadot/api-base/types';
 import type { Bytes, Null, Option, Result, U8aFixed, Vec, bool, i128, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
-import type { AccountId32, H160, H256, Permill, Perquintill } from '@polkadot/types/interfaces/runtime';
+import type { AccountId32, H160, H256, Perbill, Permill, Perquintill } from '@polkadot/types/interfaces/runtime';
 import type { CumulusPrimitivesCoreAggregateMessageOrigin, EthereumLog, EvmCoreErrorExitReason, FrameSupportDispatchDispatchInfo, FrameSupportDispatchPostDispatchInfo, FrameSupportMessagesProcessMessageError, FrameSupportPreimagesBounded, FrameSupportTokensMiscBalanceStatus, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, HydradxTraitsStableswapAssetAmount, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletBroadcastAsset, PalletBroadcastExecutionType, PalletBroadcastFee, PalletBroadcastFiller, PalletBroadcastTradeOperation, PalletClaimsEthereumAddress, PalletConvictionVotingTally, PalletConvictionVotingVoteAccountVote, PalletDcaOrder, PalletDemocracyMetadataOwner, PalletDemocracyVoteAccountVote, PalletDemocracyVoteThreshold, PalletLbpPool, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletReferralsAssetAmount, PalletReferralsFeeDistribution, PalletReferralsLevel, PalletStableswapPoolPegInfo, PalletStableswapTradability, PalletStateTrieMigrationError, PalletStateTrieMigrationMigrationCompute, PalletXykAssetPair, SpRuntimeDispatchError, SpRuntimeDispatchErrorWithPostInfo, SpWeightsWeightV2Weight, StagingXcmV4Asset, StagingXcmV4AssetAssets, StagingXcmV4Location, StagingXcmV4Response, StagingXcmV4TraitsOutcome, StagingXcmV4Xcm, XcmV3TraitsError, XcmVersionedAssets, XcmVersionedLocation } from '@polkadot/types/lookup';
 
 export type __AugmentedEvent<ApiType extends ApiTypes> = AugmentedEvent<ApiType>;
@@ -618,6 +618,58 @@ declare module '@polkadot/api-base/types/events' {
        * Deployer was removed.
        **/
       DeployerRemoved: AugmentedEvent<ApiType, [who: H160], { who: H160 }>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
+    };
+    hsm: {
+      /**
+       * Arbitrage executed successfully
+       * 
+       * Parameters:
+       * - `asset_id`: The collateral asset used in the arbitrage
+       * - `hollar_amount`: Amount of Hollar that was included in the arbitrage operation
+       **/
+      ArbitrageExecuted: AugmentedEvent<ApiType, [assetId: u32, hollarAmount: u128], { assetId: u32, hollarAmount: u128 }>;
+      /**
+       * A new collateral asset was added
+       * 
+       * Parameters:
+       * - `asset_id`: The ID of the asset added as collateral
+       * - `pool_id`: The StableSwap pool ID where this asset belongs
+       * - `purchase_fee`: Fee applied when buying Hollar with this asset
+       * - `max_buy_price_coefficient`: Maximum buy price coefficient for HSM to buy back Hollar
+       * - `buy_back_fee`: Fee applied when buying back Hollar
+       * - `buyback_rate`: Parameter that controls how quickly HSM can buy Hollar with this asset
+       **/
+      CollateralAdded: AugmentedEvent<ApiType, [assetId: u32, poolId: u32, purchaseFee: Permill, maxBuyPriceCoefficient: u128, buyBackFee: Permill, buybackRate: Perbill], { assetId: u32, poolId: u32, purchaseFee: Permill, maxBuyPriceCoefficient: u128, buyBackFee: Permill, buybackRate: Perbill }>;
+      /**
+       * A collateral asset was removed
+       * 
+       * Parameters:
+       * - `asset_id`: The ID of the asset removed from collaterals
+       * - `amount`: The amount of the asset that was returned (should be zero)
+       **/
+      CollateralRemoved: AugmentedEvent<ApiType, [assetId: u32, amount: u128], { assetId: u32, amount: u128 }>;
+      /**
+       * A collateral asset was updated
+       * 
+       * Parameters:
+       * - `asset_id`: The ID of the updated collateral asset
+       * - `purchase_fee`: New purchase fee if updated (None if not changed)
+       * - `max_buy_price_coefficient`: New max buy price coefficient if updated (None if not changed)
+       * - `buy_back_fee`: New buy back fee if updated (None if not changed)
+       * - `buyback_rate`: New buyback rate if updated (None if not changed)
+       **/
+      CollateralUpdated: AugmentedEvent<ApiType, [assetId: u32, purchaseFee: Option<Permill>, maxBuyPriceCoefficient: Option<u128>, buyBackFee: Option<Permill>, buybackRate: Option<Perbill>], { assetId: u32, purchaseFee: Option<Permill>, maxBuyPriceCoefficient: Option<u128>, buyBackFee: Option<Permill>, buybackRate: Option<Perbill> }>;
+      /**
+       * Flash minter address set
+       * 
+       * Parameters:
+       * - `flash_minter`: The EVM address of the flash minter contract
+       **/
+      FlashMinterSet: AugmentedEvent<ApiType, [flashMinter: H160], { flashMinter: H160 }>;
       /**
        * Generic event
        **/

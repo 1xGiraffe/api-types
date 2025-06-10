@@ -419,6 +419,24 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       [key: string]: Codec;
     };
+    hsm: {
+      /**
+       * The gas limit for the execution of EVM calls
+       **/
+      gasLimit: u64 & AugmentedConst<ApiType>;
+      /**
+       * Asset ID of Hollar
+       **/
+      hollarId: u32 & AugmentedConst<ApiType>;
+      /**
+       * Pallet ID to determine HSM account
+       **/
+      palletId: FrameSupportPalletId & AugmentedConst<ApiType>;
+      /**
+       * Generic const
+       **/
+      [key: string]: Codec;
+    };
     identity: {
       /**
        * The amount held on deposit for a registered identity.
@@ -488,6 +506,10 @@ declare module '@polkadot/api-base/types/consts' {
        * The gas limit for the execution of the liquidation call.
        **/
       gasLimit: u64 & AugmentedConst<ApiType>;
+      /**
+       * Asset ID of Hollar
+       **/
+      hollarId: u32 & AugmentedConst<ApiType>;
       /**
        * Account who receives the profit.
        **/
