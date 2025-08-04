@@ -9,7 +9,7 @@ import type { ApiTypes, AugmentedEvent } from '@polkadot/api-base/types';
 import type { Bytes, Null, Option, Result, U8aFixed, Vec, bool, i128, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, H160, H256, Perbill, Permill, Perquintill } from '@polkadot/types/interfaces/runtime';
-import type { CumulusPrimitivesCoreAggregateMessageOrigin, EthereumLog, EvmCoreErrorExitReason, FrameSupportDispatchDispatchInfo, FrameSupportDispatchPostDispatchInfo, FrameSupportMessagesProcessMessageError, FrameSupportPreimagesBounded, FrameSupportTokensMiscBalanceStatus, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, HydradxTraitsStableswapAssetAmount, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletBroadcastAsset, PalletBroadcastExecutionType, PalletBroadcastFee, PalletBroadcastFiller, PalletBroadcastTradeOperation, PalletClaimsEthereumAddress, PalletConvictionVotingTally, PalletConvictionVotingVoteAccountVote, PalletDcaOrder, PalletDemocracyMetadataOwner, PalletDemocracyVoteAccountVote, PalletDemocracyVoteThreshold, PalletLbpPool, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletReferralsAssetAmount, PalletReferralsFeeDistribution, PalletReferralsLevel, PalletStableswapPoolPegInfo, PalletStableswapTradability, PalletStateTrieMigrationError, PalletStateTrieMigrationMigrationCompute, PalletXykAssetPair, SpRuntimeDispatchError, SpRuntimeDispatchErrorWithPostInfo, SpWeightsWeightV2Weight, StagingXcmV4Asset, StagingXcmV4AssetAssets, StagingXcmV4Location, StagingXcmV4Response, StagingXcmV4TraitsOutcome, StagingXcmV4Xcm, XcmV3TraitsError, XcmVersionedAssets, XcmVersionedLocation } from '@polkadot/types/lookup';
+import type { CumulusPrimitivesCoreAggregateMessageOrigin, EthereumLog, EvmCoreErrorExitReason, FrameSupportDispatchDispatchInfo, FrameSupportDispatchPostDispatchInfo, FrameSupportMessagesProcessMessageError, FrameSupportPreimagesBounded, FrameSupportTokensMiscBalanceStatus, HydradxRuntimeSystemProxyType, HydradxRuntimeXcmAssetLocation, HydradxTraitsStableswapAssetAmount, OrmlVestingVestingSchedule, PalletAssetRegistryAssetType, PalletBroadcastAsset, PalletBroadcastExecutionType, PalletBroadcastFee, PalletBroadcastFiller, PalletBroadcastTradeOperation, PalletClaimsEthereumAddress, PalletConvictionVotingTally, PalletConvictionVotingVoteAccountVote, PalletDcaOrder, PalletDemocracyMetadataOwner, PalletDemocracyVoteAccountVote, PalletDemocracyVoteThreshold, PalletDynamicFeesAssetFeeConfig, PalletLbpPool, PalletLiquidityMiningLoyaltyCurve, PalletMultisigTimepoint, PalletOmnipoolTradability, PalletReferralsAssetAmount, PalletReferralsFeeDistribution, PalletReferralsLevel, PalletStableswapPegSource, PalletStableswapPoolPegInfo, PalletStableswapTradability, PalletStateTrieMigrationError, PalletStateTrieMigrationMigrationCompute, PalletXykAssetPair, SpRuntimeDispatchError, SpRuntimeDispatchErrorWithPostInfo, SpWeightsWeightV2Weight, StagingXcmV4Asset, StagingXcmV4AssetAssets, StagingXcmV4Location, StagingXcmV4Response, StagingXcmV4TraitsOutcome, StagingXcmV4Xcm, XcmV3TraitsError, XcmVersionedAssets, XcmVersionedLocation } from '@polkadot/types/lookup';
 
 export type __AugmentedEvent<ApiType extends ApiTypes> = AugmentedEvent<ApiType>;
 
@@ -183,6 +183,18 @@ declare module '@polkadot/api-base/types/events' {
        **/
       AddLiquidityLimitChanged: AugmentedEvent<ApiType, [assetId: u32, liquidityLimit: Option<ITuple<[u32, u32]>>], { assetId: u32, liquidityLimit: Option<ITuple<[u32, u32]>> }>;
       /**
+       * Asset went to lockdown
+       **/
+      AssetLockdown: AugmentedEvent<ApiType, [assetId: u32, until: u32], { assetId: u32, until: u32 }>;
+      /**
+       * Asset lockdown was removed
+       **/
+      AssetLockdownRemoved: AugmentedEvent<ApiType, [assetId: u32], { assetId: u32 }>;
+      /**
+       * All reserved amount of deposit was released
+       **/
+      DepositReleased: AugmentedEvent<ApiType, [who: AccountId32, assetId: u32], { who: AccountId32, assetId: u32 }>;
+      /**
        * Remove liquidity limit of an asset was changed.
        **/
       RemoveLiquidityLimitChanged: AugmentedEvent<ApiType, [assetId: u32, liquidityLimit: Option<ITuple<[u32, u32]>>], { assetId: u32, liquidityLimit: Option<ITuple<[u32, u32]>> }>;
@@ -281,42 +293,6 @@ declare module '@polkadot/api-base/types/events' {
        **/
       [key: string]: AugmentedEvent<ApiType>;
     };
-    council: {
-      /**
-       * A motion was approved by the required threshold.
-       **/
-      Approved: AugmentedEvent<ApiType, [proposalHash: H256], { proposalHash: H256 }>;
-      /**
-       * A proposal was closed because its threshold was reached or after its duration was up.
-       **/
-      Closed: AugmentedEvent<ApiType, [proposalHash: H256, yes: u32, no: u32], { proposalHash: H256, yes: u32, no: u32 }>;
-      /**
-       * A motion was not approved by the required threshold.
-       **/
-      Disapproved: AugmentedEvent<ApiType, [proposalHash: H256], { proposalHash: H256 }>;
-      /**
-       * A motion was executed; result will be `Ok` if it returned without error.
-       **/
-      Executed: AugmentedEvent<ApiType, [proposalHash: H256, result: Result<Null, SpRuntimeDispatchError>], { proposalHash: H256, result: Result<Null, SpRuntimeDispatchError> }>;
-      /**
-       * A single member did some action; result will be `Ok` if it returned without error.
-       **/
-      MemberExecuted: AugmentedEvent<ApiType, [proposalHash: H256, result: Result<Null, SpRuntimeDispatchError>], { proposalHash: H256, result: Result<Null, SpRuntimeDispatchError> }>;
-      /**
-       * A motion (given hash) has been proposed (by given account) with a threshold (given
-       * `MemberCount`).
-       **/
-      Proposed: AugmentedEvent<ApiType, [account: AccountId32, proposalIndex: u32, proposalHash: H256, threshold: u32], { account: AccountId32, proposalIndex: u32, proposalHash: H256, threshold: u32 }>;
-      /**
-       * A motion (given hash) has been voted on by given account, leaving
-       * a tally (yes votes and no votes given respectively as `MemberCount`).
-       **/
-      Voted: AugmentedEvent<ApiType, [account: AccountId32, proposalHash: H256, voted: bool, yes: u32, no: u32], { account: AccountId32, proposalHash: H256, voted: bool, yes: u32, no: u32 }>;
-      /**
-       * Generic event
-       **/
-      [key: string]: AugmentedEvent<ApiType>;
-    };
     cumulusXcm: {
       /**
        * Downward message executed with the given outcome.
@@ -377,6 +353,10 @@ declare module '@polkadot/api-base/types/events' {
        * Randomness generation failed possibly coming from missing data about relay chain
        **/
       RandomnessGenerationFailed: AugmentedEvent<ApiType, [block: u32, error: SpRuntimeDispatchError], { block: u32, error: SpRuntimeDispatchError }>;
+      /**
+       * DCA reserve for the given asset have been unlocked for a user
+       **/
+      ReserveUnlocked: AugmentedEvent<ApiType, [who: AccountId32, assetId: u32], { who: AccountId32, assetId: u32 }>;
       /**
        * The DCA is scheduled for next execution
        **/
@@ -500,48 +480,13 @@ declare module '@polkadot/api-base/types/events' {
     };
     dynamicFees: {
       /**
-       * Generic event
+       * Asset fee configuration has been removed
        **/
-      [key: string]: AugmentedEvent<ApiType>;
-    };
-    elections: {
+      AssetFeeConfigRemoved: AugmentedEvent<ApiType, [assetId: u32], { assetId: u32 }>;
       /**
-       * A candidate was slashed by amount due to failing to obtain a seat as member or
-       * runner-up.
-       * 
-       * Note that old members and runners-up are also candidates.
+       * Asset fee configuration has been set
        **/
-      CandidateSlashed: AugmentedEvent<ApiType, [candidate: AccountId32, amount: u128], { candidate: AccountId32, amount: u128 }>;
-      /**
-       * Internal error happened while trying to perform election.
-       **/
-      ElectionError: AugmentedEvent<ApiType, []>;
-      /**
-       * No (or not enough) candidates existed for this round. This is different from
-       * `NewTerm(\[\])`. See the description of `NewTerm`.
-       **/
-      EmptyTerm: AugmentedEvent<ApiType, []>;
-      /**
-       * A member has been removed. This should always be followed by either `NewTerm` or
-       * `EmptyTerm`.
-       **/
-      MemberKicked: AugmentedEvent<ApiType, [member: AccountId32], { member: AccountId32 }>;
-      /**
-       * A new term with new_members. This indicates that enough candidates existed to run
-       * the election, not that enough have has been elected. The inner value must be examined
-       * for this purpose. A `NewTerm(\[\])` indicates that some candidates got their bond
-       * slashed and none were elected, whilst `EmptyTerm` means that no candidates existed to
-       * begin with.
-       **/
-      NewTerm: AugmentedEvent<ApiType, [newMembers: Vec<ITuple<[AccountId32, u128]>>], { newMembers: Vec<ITuple<[AccountId32, u128]>> }>;
-      /**
-       * Someone has renounced their candidacy.
-       **/
-      Renounced: AugmentedEvent<ApiType, [candidate: AccountId32], { candidate: AccountId32 }>;
-      /**
-       * A seat holder was slashed by amount by being forcefully removed from the set.
-       **/
-      SeatHolderSlashed: AugmentedEvent<ApiType, [seatHolder: AccountId32, amount: u128], { seatHolder: AccountId32, amount: u128 }>;
+      AssetFeeConfigSet: AugmentedEvent<ApiType, [assetId: u32, params: PalletDynamicFeesAssetFeeConfig], { assetId: u32, params: PalletDynamicFeesAssetFeeConfig }>;
       /**
        * Generic event
        **/
@@ -1456,6 +1401,14 @@ declare module '@polkadot/api-base/types/events' {
        **/
       PoolDestroyed: AugmentedEvent<ApiType, [poolId: u32], { poolId: u32 }>;
       /**
+       * Pool max peg update has been updated.
+       **/
+      PoolMaxPegUpdateUpdated: AugmentedEvent<ApiType, [poolId: u32, maxPegUpdate: Permill], { poolId: u32, maxPegUpdate: Permill }>;
+      /**
+       * Pool peg source has been updated.
+       **/
+      PoolPegSourceUpdated: AugmentedEvent<ApiType, [poolId: u32, assetId: u32, pegSource: PalletStableswapPegSource], { poolId: u32, assetId: u32, pegSource: PalletStableswapPegSource }>;
+      /**
        * Sell trade executed. Trade fee paid in asset leaving the pool (already subtracted from amount_out).
        * Deprecated. Replaced by pallet_broadcast::Swapped
        **/
@@ -1587,32 +1540,6 @@ declare module '@polkadot/api-base/types/events' {
        * a tally (yes votes and no votes given respectively as `MemberCount`).
        **/
       Voted: AugmentedEvent<ApiType, [account: AccountId32, proposalHash: H256, voted: bool, yes: u32, no: u32], { account: AccountId32, proposalHash: H256, voted: bool, yes: u32, no: u32 }>;
-      /**
-       * Generic event
-       **/
-      [key: string]: AugmentedEvent<ApiType>;
-    };
-    tips: {
-      /**
-       * A new tip suggestion has been opened.
-       **/
-      NewTip: AugmentedEvent<ApiType, [tipHash: H256], { tipHash: H256 }>;
-      /**
-       * A tip suggestion has been closed.
-       **/
-      TipClosed: AugmentedEvent<ApiType, [tipHash: H256, who: AccountId32, payout: u128], { tipHash: H256, who: AccountId32, payout: u128 }>;
-      /**
-       * A tip suggestion has reached threshold and is closing.
-       **/
-      TipClosing: AugmentedEvent<ApiType, [tipHash: H256], { tipHash: H256 }>;
-      /**
-       * A tip suggestion has been retracted.
-       **/
-      TipRetracted: AugmentedEvent<ApiType, [tipHash: H256], { tipHash: H256 }>;
-      /**
-       * A tip suggestion has been slashed.
-       **/
-      TipSlashed: AugmentedEvent<ApiType, [tipHash: H256, finder: AccountId32, deposit: u128], { tipHash: H256, finder: AccountId32, deposit: u128 }>;
       /**
        * Generic event
        **/

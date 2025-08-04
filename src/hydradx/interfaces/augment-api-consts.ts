@@ -157,16 +157,6 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       [key: string]: Codec;
     };
-    council: {
-      /**
-       * The maximum weight of a dispatch call that can be proposed and executed.
-       **/
-      maxProposalWeight: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
-      /**
-       * Generic const
-       **/
-      [key: string]: Codec;
-    };
     currencies: {
       getNativeCurrencyId: u32 & AugmentedConst<ApiType>;
       reserveAccount: AccountId32 & AugmentedConst<ApiType>;
@@ -326,70 +316,6 @@ declare module '@polkadot/api-base/types/consts' {
     dynamicFees: {
       assetFeeParameters: PalletDynamicFeesFeeParams & AugmentedConst<ApiType>;
       protocolFeeParameters: PalletDynamicFeesFeeParams & AugmentedConst<ApiType>;
-      /**
-       * Generic const
-       **/
-      [key: string]: Codec;
-    };
-    elections: {
-      /**
-       * How much should be locked up in order to submit one's candidacy.
-       **/
-      candidacyBond: u128 & AugmentedConst<ApiType>;
-      /**
-       * Number of members to elect.
-       **/
-      desiredMembers: u32 & AugmentedConst<ApiType>;
-      /**
-       * Number of runners_up to keep.
-       **/
-      desiredRunnersUp: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum number of candidates in a phragmen election.
-       * 
-       * Warning: This impacts the size of the election which is run onchain. Chose wisely, and
-       * consider how it will impact `T::WeightInfo::election_phragmen`.
-       * 
-       * When this limit is reached no more candidates are accepted in the election.
-       **/
-      maxCandidates: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum number of voters to allow in a phragmen election.
-       * 
-       * Warning: This impacts the size of the election which is run onchain. Chose wisely, and
-       * consider how it will impact `T::WeightInfo::election_phragmen`.
-       * 
-       * When the limit is reached the new voters are ignored.
-       **/
-      maxVoters: u32 & AugmentedConst<ApiType>;
-      /**
-       * Maximum numbers of votes per voter.
-       * 
-       * Warning: This impacts the size of the election which is run onchain. Chose wisely, and
-       * consider how it will impact `T::WeightInfo::election_phragmen`.
-       **/
-      maxVotesPerVoter: u32 & AugmentedConst<ApiType>;
-      /**
-       * Identifier for the elections-phragmen pallet's lock
-       **/
-      palletId: U8aFixed & AugmentedConst<ApiType>;
-      /**
-       * How long each seat is kept. This defines the next block number at which an election
-       * round will happen. If set to zero, no elections are ever triggered and the module will
-       * be in passive mode.
-       **/
-      termDuration: u32 & AugmentedConst<ApiType>;
-      /**
-       * Base deposit associated with voting.
-       * 
-       * This should be sensibly high to economically ensure the pallet cannot be attacked by
-       * creating a gigantic number of votes.
-       **/
-      votingBondBase: u128 & AugmentedConst<ApiType>;
-      /**
-       * The amount of bond that need to be locked for each vote (32 bytes).
-       **/
-      votingBondFactor: u128 & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/
@@ -1035,38 +961,6 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       [key: string]: Codec;
     };
-    tips: {
-      /**
-       * The amount held on deposit per byte within the tip report reason or bounty description.
-       **/
-      dataDepositPerByte: u128 & AugmentedConst<ApiType>;
-      /**
-       * Maximum acceptable reason length.
-       * 
-       * Benchmarks depend on this value, be sure to update weights file when changing this value
-       **/
-      maximumReasonLength: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum amount for a single tip.
-       **/
-      maxTipAmount: u128 & AugmentedConst<ApiType>;
-      /**
-       * The period for which a tip remains open after is has achieved threshold tippers.
-       **/
-      tipCountdown: u32 & AugmentedConst<ApiType>;
-      /**
-       * The percent of the final tip which goes to the original reporter of the tip.
-       **/
-      tipFindersFee: Percent & AugmentedConst<ApiType>;
-      /**
-       * The non-zero amount held on deposit for placing a tip report.
-       **/
-      tipReportDepositBase: u128 & AugmentedConst<ApiType>;
-      /**
-       * Generic const
-       **/
-      [key: string]: Codec;
-    };
     tokens: {
       maxLocks: u32 & AugmentedConst<ApiType>;
       /**
@@ -1288,6 +1182,14 @@ declare module '@polkadot/api-base/types/consts' {
        * NFT collection id for liquidity mining's deposit nfts.
        **/
       nftCollectionId: u128 & AugmentedConst<ApiType>;
+      /**
+       * Oracle's liquidity aggregation period.
+       **/
+      oraclePeriod: HydradxTraitsOracleOraclePeriod & AugmentedConst<ApiType>;
+      /**
+       * Oracle source identifier for this pallet.
+       **/
+      oracleSource: U8aFixed & AugmentedConst<ApiType>;
       /**
        * Generic const
        **/

@@ -181,6 +181,20 @@ declare module '@polkadot/api-base/types/errors' {
     };
     circuitBreaker: {
       /**
+       * Asset still in lockdown as it reached the allowed deposit limit for the period
+       * Query the `asset_lockdown_state` storage to determine until which block the asset is locked,
+       * so that the deposit can be released afterward.
+       **/
+      AssetInLockdown: AugmentedError<ApiType>;
+      /**
+       * Asset is not in a lockdown
+       **/
+      AssetNotInLockdown: AugmentedError<ApiType>;
+      /**
+       * Invalid amount to save deposit
+       **/
+      InvalidAmount: AugmentedError<ApiType>;
+      /**
        * Invalid value for a limit. Limit must be non-zero.
        **/
       InvalidLimitValue: AugmentedError<ApiType>;
@@ -362,56 +376,6 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
-    council: {
-      /**
-       * Members are already initialized!
-       **/
-      AlreadyInitialized: AugmentedError<ApiType>;
-      /**
-       * Duplicate proposals not allowed
-       **/
-      DuplicateProposal: AugmentedError<ApiType>;
-      /**
-       * Duplicate vote ignored
-       **/
-      DuplicateVote: AugmentedError<ApiType>;
-      /**
-       * Account is not a member
-       **/
-      NotMember: AugmentedError<ApiType>;
-      /**
-       * Prime account is not a member
-       **/
-      PrimeAccountNotMember: AugmentedError<ApiType>;
-      /**
-       * Proposal must exist
-       **/
-      ProposalMissing: AugmentedError<ApiType>;
-      /**
-       * The close call was made too early, before the end of the voting.
-       **/
-      TooEarly: AugmentedError<ApiType>;
-      /**
-       * There can only be a maximum of `MaxProposals` active proposals.
-       **/
-      TooManyProposals: AugmentedError<ApiType>;
-      /**
-       * Mismatched index
-       **/
-      WrongIndex: AugmentedError<ApiType>;
-      /**
-       * The given length bound for the proposal was too low.
-       **/
-      WrongProposalLength: AugmentedError<ApiType>;
-      /**
-       * The given weight bound for the proposal was too low.
-       **/
-      WrongProposalWeight: AugmentedError<ApiType>;
-      /**
-       * Generic error
-       **/
-      [key: string]: AugmentedError<ApiType>;
-    };
     currencies: {
       /**
        * Unable to convert the Amount type into Balance.
@@ -456,6 +420,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       Forbidden: AugmentedError<ApiType>;
       /**
+       * User still has active DCA schedules and cannot unlock reserves
+       **/
+      HasActiveSchedules: AugmentedError<ApiType>;
+      /**
        * Error that should not really happen only in case of invalid state of the schedule storage entries
        **/
       InvalidState: AugmentedError<ApiType>;
@@ -479,6 +447,10 @@ declare module '@polkadot/api-base/types/errors' {
        * No parent hash has been found from relay chain
        **/
       NoParentHashFound: AugmentedError<ApiType>;
+      /**
+       * No reserves are locked for the user for the given asset
+       **/
+      NoReservesLocked: AugmentedError<ApiType>;
       /**
        * Period should be longer than 5 blocks
        **/
@@ -647,79 +619,9 @@ declare module '@polkadot/api-base/types/errors' {
     };
     dynamicFees: {
       /**
-       * Generic error
+       * Invalid fee parameters provided
        **/
-      [key: string]: AugmentedError<ApiType>;
-    };
-    elections: {
-      /**
-       * Duplicated candidate submission.
-       **/
-      DuplicatedCandidate: AugmentedError<ApiType>;
-      /**
-       * Candidate does not have enough funds.
-       **/
-      InsufficientCandidateFunds: AugmentedError<ApiType>;
-      /**
-       * The renouncing origin presented a wrong `Renouncing` parameter.
-       **/
-      InvalidRenouncing: AugmentedError<ApiType>;
-      /**
-       * Prediction regarding replacement after member removal is wrong.
-       **/
-      InvalidReplacement: AugmentedError<ApiType>;
-      /**
-       * The provided count of number of votes is incorrect.
-       **/
-      InvalidVoteCount: AugmentedError<ApiType>;
-      /**
-       * The provided count of number of candidates is incorrect.
-       **/
-      InvalidWitnessData: AugmentedError<ApiType>;
-      /**
-       * Cannot vote with stake less than minimum balance.
-       **/
-      LowBalance: AugmentedError<ApiType>;
-      /**
-       * Cannot vote more than maximum allowed.
-       **/
-      MaximumVotesExceeded: AugmentedError<ApiType>;
-      /**
-       * Member cannot re-submit candidacy.
-       **/
-      MemberSubmit: AugmentedError<ApiType>;
-      /**
-       * Must be a voter.
-       **/
-      MustBeVoter: AugmentedError<ApiType>;
-      /**
-       * Not a member.
-       **/
-      NotMember: AugmentedError<ApiType>;
-      /**
-       * Must vote for at least one candidate.
-       **/
-      NoVotes: AugmentedError<ApiType>;
-      /**
-       * Runner cannot re-submit candidacy.
-       **/
-      RunnerUpSubmit: AugmentedError<ApiType>;
-      /**
-       * Too many candidates have been created.
-       **/
-      TooManyCandidates: AugmentedError<ApiType>;
-      /**
-       * Cannot vote more than candidates.
-       **/
-      TooManyVotes: AugmentedError<ApiType>;
-      /**
-       * Voter can not pay voting bond.
-       **/
-      UnableToPayBond: AugmentedError<ApiType>;
-      /**
-       * Cannot vote when no candidates or members exist.
-       **/
-      UnableToVote: AugmentedError<ApiType>;
+      InvalidFeeParameters: AugmentedError<ApiType>;
       /**
        * Generic error
        **/
@@ -1591,10 +1493,6 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidBlocksPerPeriod: AugmentedError<ApiType>;
       /**
-       * LP shares amount is not valid.
-       **/
-      InvalidDepositAmount: AugmentedError<ApiType>;
-      /**
        * Loyalty curve's initial reward percentage is not valid. Valid range is: [0, 1).
        **/
       InvalidInitialRewardPercentage: AugmentedError<ApiType>;
@@ -2276,6 +2174,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       MissingTargetPegOracle: AugmentedError<ApiType>;
       /**
+       * Pool does not have pegs configured.
+       **/
+      NoPegSource: AugmentedError<ApiType>;
+      /**
        * Not allowed to perform an operation on given asset.
        **/
       NotAllowed: AugmentedError<ApiType>;
@@ -2506,40 +2408,6 @@ declare module '@polkadot/api-base/types/errors' {
        * The given weight bound for the proposal was too low.
        **/
       WrongProposalWeight: AugmentedError<ApiType>;
-      /**
-       * Generic error
-       **/
-      [key: string]: AugmentedError<ApiType>;
-    };
-    tips: {
-      /**
-       * The tip was already found/started.
-       **/
-      AlreadyKnown: AugmentedError<ApiType>;
-      /**
-       * The tip given was too generous.
-       **/
-      MaxTipAmountExceeded: AugmentedError<ApiType>;
-      /**
-       * The account attempting to retract the tip is not the finder of the tip.
-       **/
-      NotFinder: AugmentedError<ApiType>;
-      /**
-       * The tip cannot be claimed/closed because it's still in the countdown period.
-       **/
-      Premature: AugmentedError<ApiType>;
-      /**
-       * The reason given is just too big.
-       **/
-      ReasonTooBig: AugmentedError<ApiType>;
-      /**
-       * The tip cannot be claimed/closed because there are not enough tippers yet.
-       **/
-      StillOpen: AugmentedError<ApiType>;
-      /**
-       * The tip hash is unknown.
-       **/
-      UnknownTip: AugmentedError<ApiType>;
       /**
        * Generic error
        **/
@@ -3060,6 +2928,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       DepositDataNotFound: AugmentedError<ApiType>;
       /**
+       * Failed to calculate value of xyk shares
+       **/
+      FailedToValueShares: AugmentedError<ApiType>;
+      /**
        * Failed to calculate `pot`'s account.
        **/
       FailToGetPotId: AugmentedError<ApiType>;
@@ -3143,10 +3015,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Blocks per period can't be 0.
        **/
       InvalidBlocksPerPeriod: AugmentedError<ApiType>;
-      /**
-       * LP shares amount is not valid.
-       **/
-      InvalidDepositAmount: AugmentedError<ApiType>;
       /**
        * Loyalty curve's initial reward percentage is not valid. Valid range is: [0, 1).
        **/
